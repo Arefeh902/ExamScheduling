@@ -1,7 +1,7 @@
 from models import Course, Student, TimeSlot, Schedule
 
 courses: list[Course]
-time_slots: list[TimeSlot]
+available_time_slots: list[TimeSlot]
 students: list[Student]
 # load exams and time slots
 

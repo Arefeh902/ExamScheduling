@@ -1,4 +1,6 @@
 
+SLOT_PER_DAY = 3
+
 
 class Course:
     title: str
@@ -29,13 +31,15 @@ class Student:
 class TimeSlot:
     pk: int              # timeslot pks to find exam distances
     is_available: bool   # for eliminating restricted dates
+    is_holiday: bool
 
-    def __init__(self, pk: int, is_available: bool = True):
+    def __init__(self, pk: int, is_available: bool = True, is_holiday: bool = False):
         self.pk = pk
         self.is_available = is_available
+        self.is_holiday = is_holiday
 
     def __str__(self):
-        return f'Day:{self.pk // 3} Slot:{self.pk % 3}'
+        return f'Day:{self.pk // SLOT_PER_DAY} Slot:{self.pk % SLOT_PER_DAY}'
 
 
 class Schedule:
