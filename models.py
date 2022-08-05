@@ -1,8 +1,29 @@
 
+
 class Course:
-    course: str
+    title: str
     professor: str
-    students: list[int]  # student ids
+    students_ids: list[int]  # student ids
+
+    def __init__(self, title: str, professor: str, students_ids: list[int]):
+        self.title = title
+        self.professor = professor
+        self.students_ids = students_ids
+
+    def __str__(self):
+        return self.title
+
+
+class Student:
+    pk: int
+    courses: list[Course]
+
+    def __init__(self, pk: int, courses: list[Course]):
+        self.pk = pk
+        self.courses = courses
+
+    def __str__(self):
+        return str(self.pk)
 
 
 class TimeSlot:
@@ -18,10 +39,12 @@ class TimeSlot:
 
 
 class Schedule:
-    mapping: dict[TimeSlot: list[Course]]
+    time_to_course: dict[TimeSlot: list[Course]]
+    course_to_time: dict[Course: TimeSlot]
     fitness: int
 
     def __init__(self, time_slots: list[TimeSlot]):
-        self.mapping = dict()
+        self.time_to_course = dict()
+        self.course_to_time = dict()
         for slot in time_slots:
-            self.mapping[slot] = list()
+            self.time_to_course[slot] = list()

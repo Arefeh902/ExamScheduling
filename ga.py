@@ -30,7 +30,8 @@ class GeneticAlgorithm:
         schedule: Schedule = Schedule(self.time_slots)
         for course in self.courses:
             slot: TimeSlot = random.choice(self.time_slots)
-            schedule[slot].appen(course)
+            schedule.time_to_course[slot].appen(course)
+            schedule.course_to_time[course] = slot
         return schedule
 
     def generate_population(self) -> list[Schedule]:
