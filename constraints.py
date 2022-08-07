@@ -60,9 +60,20 @@ def two_consecutive_exams_with_single_day_rest(schedule: Schedule, student: Stud
     return count
 
 
-def holidays(schedule: Schedule, student: Student) -> int:
+def exam_on_holidays(schedule: Schedule, student: Student) -> int:
     count: int = 0
     for course in student.courses:
         if schedule.course_to_time[course].is_holiday:
             count += 1
     return count
+
+
+def penalty_per_student(schedule: Schedule, student: Student) -> int:
+    penalty: int = 0
+
+    penalty += 1000 * two_consecutive_exams_with_single_day_rest(schedule, student)
+    penalty += 50000 * three_consecutive_exams(schedule, student)
+    penalty += 500 * two_consecutive_exams_with_single_day_rest(schedule, student)
+    penalty += 10 * exam_on_holidays(schedule, student)
+
+    return penalty

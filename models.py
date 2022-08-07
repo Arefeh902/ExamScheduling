@@ -52,3 +52,13 @@ class Schedule:
         self.course_to_time = dict()
         for slot in time_slots:
             self.time_to_course[slot] = list()
+
+    def print(self):
+        for time in self.time_to_course:
+            print(time, end=' ')
+            for c in self.time_to_course[time]:
+                print(c, end=' ')
+            print()
+            if time.pk % SLOT_PER_DAY == SLOT_PER_DAY - 1:
+                print()
+

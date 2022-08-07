@@ -1,9 +1,10 @@
 from models import Course, Student, TimeSlot, Schedule
 from typing import Callable
 import random
+from constraints import student_two_exams_in_one_day, professor_tow_exams_in_one_day
 
-
-MAX_FITNESS: int = 1000000000
+MAX_FITNESS: int = 10000000000000
+MAX_RANDOM_TRY: int = 1000
 
 
 class GeneticAlgorithm:
@@ -15,6 +16,7 @@ class GeneticAlgorithm:
                  mutation_probability: float,
                  courses: list[Course],
                  students: list[Student],
+                 professors: list[str],
                  time_slots: list[TimeSlot],
                  time_slot_per_day: int,
                  penalty_per_student: Callable[[Schedule, Student], int]
@@ -25,24 +27,60 @@ class GeneticAlgorithm:
         self.mutation_probability = mutation_probability
         self.courses = courses
         self.students = students
+        self.professors = professors
         self.time_slots = time_slots
         self.time_slots_per_day = time_slot_per_day
         self.penalty_per_student = penalty_per_student
         self.num_of_time_slots = len(time_slots)
         self.current_population: list[Schedule] = list()
-        self.pool: list[Schedule] = []
+        self.pool: list[int] = [0] * self.population_size
 
     def fitness(self, schedule: Schedule) -> int:
         fit: int = MAX_FITNESS
+
+        # check hard constraints:
+        for student in self.students:
+            if student_two_exams_in_one_day(schedule, student):
+                return 1
+        for prof in self.professors:
+            if professor_tow_exams_in_one_day(schedule, prof):
+                return 1
+
         for student in self.students:
             fit -= self.penalty_per_student(schedule, student)
         return fit
+
+    @staticmethod
+    def course_intersection(course1: Course, course2: Course) -> int:
+        return len(set(course1.students_ids) & set(course2.students_ids))
+
+    def slot_with_pk(self, pk: int) -> TimeSlot:
+        for slot in self.time_slots:
+            if slot.pk == pk:
+                return slot
 
     def generate_random_solution(self) -> Schedule:
         schedule: Schedule = Schedule(self.time_slots)
         for course in self.courses:
             slot: TimeSlot = random.choice(self.time_slots)
-            schedule.time_to_course[slot].appen(course)
+            for _ in range(MAX_RANDOM_TRY):
+                day: int = slot.pk // self.time_slots_per_day
+                same_day_slots: list[TimeSlot] = []
+                for i in range(self.time_slots_per_day):
+                    same_day_slots.append(self.slot_with_pk(day + i))
+                flag: bool = True
+                for d in same_day_slots:
+                    for c in schedule.time_to_course[d]:
+                        if len(set(course.students_ids) & set(c.students_ids)) > 0:
+                            flag = False
+                            break
+                    if not flag:
+                        break
+                if flag:
+                    break
+                slot = random.choice(self.time_slots)
+
+            schedule.time_to_course[slot].append(course)
             schedule.course_to_time[course] = slot
         return schedule
 
@@ -53,15 +91,22 @@ class GeneticAlgorithm:
         return population
 
     def create_pool(self):
-        for schedule in self.current_population:
-            for _ in range(schedule.fitness):
-                self.pool.append(schedule)
+        self.pool[1] = self.current_population[0].fitness
+        for i in range(1, len(self.current_population)):
+            self.pool[i] = self.pool[i-1] + self.current_population[i].fitness
 
     def select_parents(self) -> tuple[Schedule, Schedule]:
-        parent_a: Schedule = random.choice(self.pool)
-        parent_b: Schedule = random.choice(self.pool)
-        while parent_b == parent_a:
-            parent_b = random.choice(self.pool)
+        rand_a: int = random.randint(1, self.pool[self.population_size-1])
+        rand_b: int = random.randint(1, self.pool[self.population_size-1])
+        for i in range(self.population_size):
+            if rand_a <= self.pool[i]:
+                rand_a = i
+        for i in range(self.population_size):
+            if rand_b <= self.pool[i]:
+                rand_b = i
+        parent_a: Schedule = self.current_population[rand_a]
+        parent_b: Schedule = self.current_population[rand_b]
+        # check that parents are different
         return parent_a, parent_b
 
     def crossover(self) -> Schedule:
@@ -101,6 +146,7 @@ class GeneticAlgorithm:
         best_schedule: Schedule = self.current_population[0]
 
         for _ in range(self.max_generation):
+            print(_)
 
             # calc fitness
             for schedule in self.current_population:
