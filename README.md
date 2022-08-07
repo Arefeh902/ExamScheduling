@@ -4,6 +4,8 @@ The problem of some universities in exam scheduling is they can not find a good 
 
 ## Installation
 
+[Github Repo](https://github.com/Arefeh902/ExamScheduling)
+
 Python is used for the algorithm, so you must have [python](https://www.python.org/) installed in your system.
 
 Install the requirements:
