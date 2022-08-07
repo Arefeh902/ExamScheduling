@@ -1,9 +1,9 @@
 from models import Course, Student, TimeSlot, Schedule
 from typing import Callable
 import random
-from constraints import student_two_exams_in_one_day, professor_tow_exams_in_one_day
+from constraints import student_has_two_exams_in_one_day, professor_has_tow_exams_in_one_day
 
-MAX_FITNESS: int = 10000000000000
+MAX_FITNESS: int = 100000000
 MAX_RANDOM_TRY: int = 1000
 
 
@@ -19,7 +19,7 @@ class GeneticAlgorithm:
                  professors: list[str],
                  time_slots: list[TimeSlot],
                  time_slot_per_day: int,
-                 penalty_per_student: Callable[[Schedule, Student], int]
+                 calculate_penalty_of_student: Callable[[Schedule, Student], int]
                  ):
         self.population_size = population_size
         self.max_generation = max_generation
@@ -30,7 +30,7 @@ class GeneticAlgorithm:
         self.professors = professors
         self.time_slots = time_slots
         self.time_slots_per_day = time_slot_per_day
-        self.penalty_per_student = penalty_per_student
+        self.calculate_penalty_of_student = calculate_penalty_of_student
         self.num_of_time_slots = len(time_slots)
         self.current_population: list[Schedule] = list()
         self.pool: list[int] = [0] * self.population_size
@@ -40,21 +40,23 @@ class GeneticAlgorithm:
 
         # check hard constraints:
         for student in self.students:
-            if student_two_exams_in_one_day(schedule, student):
+            if student_has_two_exams_in_one_day(schedule, student):
                 return 1
         for prof in self.professors:
-            if professor_tow_exams_in_one_day(schedule, prof):
+            if professor_has_tow_exams_in_one_day(schedule, prof):
                 return 1
 
         for student in self.students:
-            fit -= self.penalty_per_student(schedule, student)
+            fit -= self.calculate_penalty_of_student(schedule, student)
         return fit
 
     @staticmethod
-    def course_intersection(course1: Course, course2: Course) -> int:
-        return len(set(course1.students_ids) & set(course2.students_ids))
+    def get_course_intersection(course1: Course, course2: Course) -> bool:
+        if len(set(course1.students_ids) & set(course2.students_ids)) > 0:
+            return True
+        return False
 
-    def slot_with_pk(self, pk: int) -> TimeSlot:
+    def get_slot_with_pk(self, pk: int) -> TimeSlot:
         for slot in self.time_slots:
             if slot.pk == pk:
                 return slot
@@ -66,18 +68,21 @@ class GeneticAlgorithm:
             for _ in range(MAX_RANDOM_TRY):
                 day: int = slot.pk // self.time_slots_per_day
                 same_day_slots: list[TimeSlot] = []
+
                 for i in range(self.time_slots_per_day):
-                    same_day_slots.append(self.slot_with_pk(day + i))
+                    same_day_slots.append(self.get_slot_with_pk(day + i))
+
                 flag: bool = True
-                for d in same_day_slots:
-                    for c in schedule.time_to_course[d]:
-                        if len(set(course.students_ids) & set(c.students_ids)) > 0:
+                for day_ in same_day_slots:
+                    for course_ in schedule.time_to_course[day_]:
+                        if len(set(course.students_ids) & set(course_.students_ids)) > 0:
                             flag = False
                             break
                     if not flag:
                         break
                 if flag:
                     break
+
                 slot = random.choice(self.time_slots)
 
             schedule.time_to_course[slot].append(course)
