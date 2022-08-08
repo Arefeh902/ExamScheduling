@@ -42,11 +42,25 @@ After many generations, the algorithm tries to make a solution that satisfies ou
 
 ### Hyper parameters
 
-- Population size: Default to 1000
+There are 3 main parameters: `Population size`, `Maximum of Generation`, `Mutation Probability`.
 
-- Maximum of Generation: Default to 500
+In `test_params.py` a range defined for every parameter and the program runs 10 times for every set of values. The ranges are:
 
-- Mutation Probability: Default to 0.001
+- Population size: [100, 600] with step 100
+
+- Maximum of Generation: [100, 300] with step 100
+
+- Mutation Probability: [0.4, 0.9] with step 0.1
+
+To calculate which sets are the best, there are 2 scenarios:
+
+1. Evaluate average of fitnesses including values equal to 1
+
+2. Evaluate average of fitnesses excluding values equal to 1
+
+If we want to be more accurate we should use the first one, because genetic algorithm is a random based algorithm and we should consider all possible situations.
+
+The data is important to use the best possible values. We consider the data format and size is sames as we use in example data.
 
 ### Constraints
 
