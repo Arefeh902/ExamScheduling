@@ -44,12 +44,21 @@ class TimeSlot:
 
 class Schedule:
     time_to_course: dict[TimeSlot: list[Course]]
-    course_to_time: dict[Course: TimeSlot]
     fitness: int
+
+    def get_course_time(self, course: Course) -> TimeSlot:
+        for time in self.time_to_course:
+            if course in self.time_to_course[time]:
+                return time
+
+    def get_courses(self) -> list[Course]:
+        courses: list[Course] = []
+        for time in self.time_to_course:
+            courses.extend(self.time_to_course[time])
+        return courses
 
     def __init__(self, time_slots: list[TimeSlot]):
         self.time_to_course = dict()
-        self.course_to_time = dict()
         for slot in time_slots:
             self.time_to_course[slot] = list()
 
