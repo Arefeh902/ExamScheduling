@@ -1,7 +1,7 @@
 from models import Course, Student, TimeSlot, Schedule
 from typing import Callable
 import random
-from constraints import student_has_two_exams_in_one_day, professor_has_tow_exams_in_one_day
+from constraints import student_has_two_exams_in_one_day, professor_has_tow_exams_in_one_slot
 
 MAX_FITNESS: int = 100000000
 MAX_RANDOM_TRY: int = 1000
@@ -43,7 +43,7 @@ class GeneticAlgorithm:
             if student_has_two_exams_in_one_day(schedule, student):
                 return 1
         for prof in self.professors:
-            if professor_has_tow_exams_in_one_day(schedule, prof):
+            if professor_has_tow_exams_in_one_slot(schedule, prof):
                 return 1
 
         for student in self.students:

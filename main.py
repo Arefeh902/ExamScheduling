@@ -11,7 +11,7 @@ professors: list[str] = []
 
 courses, students = read_student_and_course_data('data/naft_data.csv')
 
-NUM_OF_DAYS: int = 14
+NUM_OF_DAYS: int = 12
 for i in range(NUM_OF_DAYS*SLOT_PER_DAY):
     time_slots.append(TimeSlot(i))
 

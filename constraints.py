@@ -20,14 +20,14 @@ def student_has_two_exams_in_one_day(schedule: Schedule, student: Student) -> bo
     return False
 
 
-def professor_has_tow_exams_in_one_day(schedule: Schedule, professor: str) -> bool:
+def professor_has_tow_exams_in_one_slot(schedule: Schedule, professor: str) -> bool:
     times: list[int] = []
     for course in schedule.course_to_time:
         if course.professor == professor:
             times.append(schedule.course_to_time[course].pk)
     times.sort()
     for i in range(1, len(times)):
-        if times[i]//SLOT_PER_DAY == times[i-1]//SLOT_PER_DAY:
+        if times[i] == times[i-1]:
             return True
     return False
 
