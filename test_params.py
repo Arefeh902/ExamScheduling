@@ -16,19 +16,19 @@ for i in range(NUM_OF_DAYS*SLOT_PER_DAY):
     time_slots.append(TimeSlot(i))
 
 mutation_probs: list[float] = []
-for i in range(10):
+for i in range(4, 10):
     mutation_probs.append(i/10)
 
 population_sizes: list[int] = []
-for i in range(100, 1000, 100):
+for i in range(100, 601, 200):
     population_sizes.append(i)
 
 max_generations: list[int] = []
-for i in range(50, 500, 50):
+for i in range(100, 301, 100):
     max_generations.append(i)
 
 NUM_OF_RUNNING = 10
-result = open('results.txt', 'w')
+result = open('results/results.txt', 'w')
 
 # create GeneticAlgorithm class and call genetic_algorithm
 result.write(f'population_size max_generation mutation_prob')
@@ -36,6 +36,7 @@ for population_size in population_sizes:
     for max_generation in max_generations:
         for mutation_prob in mutation_probs:
             result.write(f'\n{population_size} {max_generation} {mutation_prob}\n')
+            print(population_size, max_generation, mutation_prob)
             for _ in range(NUM_OF_RUNNING):
                 genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=population_size,
                                                                   max_generation=max_generation,

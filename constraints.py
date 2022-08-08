@@ -51,15 +51,6 @@ def has_three_consecutive_exams(schedule: Schedule, student: Student) -> int:
     return count
 
 
-def has_two_consecutive_exams_with_single_day_rest(schedule: Schedule, student: Student) -> int:
-    times: list[int] = get_student_time_slots(schedule, student)
-    count: int = 0
-    for i in range(2, len(times)):
-        if times[i-2]//SLOT_PER_DAY == times[i-1]//SLOT_PER_DAY - 2 == times[i]//SLOT_PER_DAY - 3:
-            count += 1
-    return count
-
-
 def has_exam_on_holidays(schedule: Schedule, student: Student) -> int:
     count: int = 0
     for course in student.courses:
@@ -71,9 +62,8 @@ def has_exam_on_holidays(schedule: Schedule, student: Student) -> int:
 def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
     penalty: int = 0
 
-    penalty += 1000 * has_two_consecutive_exams_with_single_day_rest(schedule, student)
+    penalty += 1000 * has_two_consecutive_exams(schedule, student)
     penalty += 50000 * has_three_consecutive_exams(schedule, student)
-    penalty += 500 * has_two_consecutive_exams_with_single_day_rest(schedule, student)
     penalty += 10 * has_exam_on_holidays(schedule, student)
 
     return penalty
