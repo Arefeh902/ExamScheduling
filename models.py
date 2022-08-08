@@ -51,6 +51,9 @@ class Schedule:
             if course in self.time_to_course[time]:
                 return time
 
+    def get_courses_in_time_slot(self, time: TimeSlot) -> list[Course]:
+        return self.time_to_course[time]
+
     def get_courses(self) -> list[Course]:
         courses: list[Course] = []
         for time in self.time_to_course:

@@ -74,7 +74,7 @@ class GeneticAlgorithm:
 
                 flag: bool = True
                 for day_ in same_day_slots:
-                    for course_ in schedule.time_to_course[day_]:
+                    for course_ in schedule.get_courses_in_time_slot(day_):
                         if len(set(course.students_ids) & set(course_.students_ids)) > 0:
                             flag = False
                             break
@@ -85,7 +85,7 @@ class GeneticAlgorithm:
 
                 slot = random.choice(self.time_slots)
 
-            schedule.time_to_course[slot].append(course)
+            schedule.get_courses_in_time_slot(slot).append(course)
 
         return schedule
 
@@ -120,10 +120,10 @@ class GeneticAlgorithm:
         for course in self.courses:
             if random.uniform(0, 1) <= 1/2:
                 slot: TimeSlot = parent_a.get_course_time(course)
-                schedule.time_to_course[slot].append(course)
+                schedule.get_courses_in_time_slot(slot).append(course)
             else:
                 slot: TimeSlot = parent_b.get_course_time(course)
-                schedule.time_to_course[slot].append(course)
+                schedule.get_courses_in_time_slot(slot).append(course)
         return schedule
 
     def mutate(self, schedule: Schedule) -> Schedule:
@@ -131,7 +131,7 @@ class GeneticAlgorithm:
             if random.uniform(0, 1) < self.mutation_probability:
                 schedule.time_to_course[schedule.get_course_time(course)].remove(course)
                 slot: TimeSlot = random.choice(self.time_slots)
-                schedule.time_to_course[slot].append(course)
+                schedule.get_courses_in_time_slot(slot).append(course)
         return schedule
 
     def get_next_generation(self) -> list[Schedule]:
