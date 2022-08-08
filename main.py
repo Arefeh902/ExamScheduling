@@ -15,23 +15,55 @@ NUM_OF_DAYS: int = 12
 for i in range(NUM_OF_DAYS*SLOT_PER_DAY):
     time_slots.append(TimeSlot(i))
 
-# create GeneticAlgorithm class and call genetic_algorithm
-genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=500,
-                                                  max_generation=10,
-                                                  mutation_probability=0.3,
-                                                  courses=courses,
-                                                  students=students,
-                                                  professors=[],
-                                                  time_slots=time_slots,
-                                                  time_slot_per_day=SLOT_PER_DAY,
-                                                  calculate_penalty_of_student=calculate_penalty_of_student
-                                                  )
-schedule: Schedule = genetic_algo.genetic_algorithm()
+hyper_parameters_list = [
+    {
+        "population_size": 600,
+        "max_generation": 300,
+        "mutation_probability": 0.9
+    },
+    {
+        "population_size": 600,
+        "max_generation": 300,
+        "mutation_probability": 0.6
+    },
+    {
+        "population_size": 500,
+        "max_generation": 200,
+        "mutation_probability": 0.9
+    },
+    {
+        "population_size": 500,
+        "max_generation": 200,
+        "mutation_probability": 0.6
+    },
+]
 
-# print results
-print(schedule.fitness)
-while schedule.fitness == 1:
-    schedule = genetic_algo.genetic_algorithm()
-    print(schedule.fitness)
+last_fitness = 0
+last_schedule = None
+
+for parameters in hyper_parameters_list:
+
+    print(parameters)
+
+    genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=parameters["population_size"],
+                                                    max_generation=parameters["max_generation"],
+                                                    mutation_probability=parameters["mutation_probability"],
+                                                    courses=courses,
+                                                    students=students,
+                                                    professors=[],
+                                                    time_slots=time_slots,
+                                                    time_slot_per_day=SLOT_PER_DAY,
+                                                    calculate_penalty_of_student=calculate_penalty_of_student
+    )
+
+    for _ in range(5):
+        schedule: Schedule = genetic_algo.genetic_algorithm()
+
+        if schedule.fitness > last_fitness:
+            last_fitness = schedule.fitness
+            last_schedule = schedule
+
+        print(schedule.fitness)
+
+    print('---------------')
 schedule.print()
-

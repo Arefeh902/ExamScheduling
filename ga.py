@@ -148,7 +148,7 @@ class GeneticAlgorithm:
         best_schedule: Schedule = self.current_population[0]
 
         for _ in range(self.max_generation):
-            print(_)
+            # print(_)
 
             # calc fitness
             for schedule in self.current_population:
