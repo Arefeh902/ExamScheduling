@@ -6,7 +6,7 @@ from models import SLOT_PER_DAY
 def get_student_time_slots(schedule: Schedule, student: Student) -> list[int]:
     times: list[int] = []
     for course in student.courses:
-        times.append(schedule.course_to_time[course].pk)
+        times.append(schedule.get_course_time(course).pk)
     times.sort()
     return times
 
@@ -22,9 +22,9 @@ def student_has_two_exams_in_one_day(schedule: Schedule, student: Student) -> bo
 
 def professor_has_tow_exams_in_one_slot(schedule: Schedule, professor: str) -> bool:
     times: list[int] = []
-    for course in schedule.course_to_time:
+    for course in schedule.get_courses():
         if course.professor == professor:
-            times.append(schedule.course_to_time[course].pk)
+            times.append(schedule.get_course_time(course).pk)
     times.sort()
     for i in range(1, len(times)):
         if times[i] == times[i-1]:
@@ -54,7 +54,7 @@ def has_three_consecutive_exams(schedule: Schedule, student: Student) -> int:
 def has_exam_on_holidays(schedule: Schedule, student: Student) -> int:
     count: int = 0
     for course in student.courses:
-        if schedule.course_to_time[course].is_holiday:
+        if schedule.get_course_time(course).is_holiday:
             count += 1
     return count
 

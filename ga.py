@@ -86,7 +86,7 @@ class GeneticAlgorithm:
                 slot = random.choice(self.time_slots)
 
             schedule.time_to_course[slot].append(course)
-            schedule.course_to_time[course] = slot
+
         return schedule
 
     def generate_population(self) -> list[Schedule]:
@@ -119,22 +119,19 @@ class GeneticAlgorithm:
         schedule: Schedule = Schedule(self.time_slots)
         for course in self.courses:
             if random.uniform(0, 1) <= 1/2:
-                slot: TimeSlot = parent_a.course_to_time[course]
+                slot: TimeSlot = parent_a.get_course_time(course)
                 schedule.time_to_course[slot].append(course)
-                schedule.course_to_time[course] = slot
             else:
-                slot: TimeSlot = parent_b.course_to_time[course]
+                slot: TimeSlot = parent_b.get_course_time(course)
                 schedule.time_to_course[slot].append(course)
-                schedule.course_to_time[course] = slot
         return schedule
 
     def mutate(self, schedule: Schedule) -> Schedule:
         for course in self.courses:
             if random.uniform(0, 1) < self.mutation_probability:
-                schedule.time_to_course[schedule.course_to_time[course]].remove(course)
+                schedule.time_to_course[schedule.get_course_time(course)].remove(course)
                 slot: TimeSlot = random.choice(self.time_slots)
                 schedule.time_to_course[slot].append(course)
-                schedule.course_to_time[course] = slot
         return schedule
 
     def get_next_generation(self) -> list[Schedule]:
