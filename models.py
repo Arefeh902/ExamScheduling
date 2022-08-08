@@ -1,4 +1,3 @@
-import csv
 
 SLOT_PER_DAY = 3
 
@@ -16,12 +15,6 @@ class Course:
     def __str__(self):
         return self.title
 
-    @staticmethod
-    def join_course_titles(courses) -> str:
-        res: str = ''
-        for course in courses:
-            res += f'{course.title} '
-        return res
 
 class Student:
     pk: int
@@ -47,17 +40,6 @@ class TimeSlot:
 
     def __str__(self):
         return f'Day:{self.pk // SLOT_PER_DAY} Slot:{self.pk % SLOT_PER_DAY}'
-
-    def __cmp__(self, other):
-        if self.pk <= other.pk:
-            return True
-        return False
-
-    def __lt__(self, other):
-        return self.pk < other.pk
-
-    def __gt__(self, other):
-        return self.pk > other.pk
 
 
 class Schedule:
@@ -92,29 +74,3 @@ class Schedule:
             if time.pk % SLOT_PER_DAY == SLOT_PER_DAY - 1:
                 print()
 
-    def get_csv_export(self, file_name: str = 'schedule.csv') -> str:
-        export_file_path = f'schedules/{file_name}'
-        export_file = open(export_file_path, 'w')
-        writer = csv.writer(export_file)
-
-        header: list[str] = ['ردیف']
-        for i in range(SLOT_PER_DAY):
-            header.append(str(i+1))
-        writer.writerow(header)
-
-        day_id: int = 0
-        data: list[str] = [str(day_id)] + [''] * SLOT_PER_DAY
-        for time in sorted(list(self.time_to_course)):
-            if time.pk // SLOT_PER_DAY != day_id:
-                writer.writerow(data)
-                day_id += 1
-                while day_id != time.pk // SLOT_PER_DAY:
-                    writer.writerow([day_id])
-                    day_id += 1
-                data = [str(day_id)] + [''] * SLOT_PER_DAY
-
-            data[time.pk % SLOT_PER_DAY + 1] += Course.join_course_titles(self.time_to_course[time])
-
-        writer.writerow(data)
-
-        return export_file_path

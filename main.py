@@ -2,7 +2,6 @@ from models import Course, Student, TimeSlot, Schedule, SLOT_PER_DAY
 from ga import GeneticAlgorithm
 from constraints import calculate_penalty_of_student
 from read_data import read_student_and_course_data
-from utils import convert_csv_to_xlsx
 
 # load data
 time_slots: list[TimeSlot] = []
@@ -17,8 +16,8 @@ for i in range(NUM_OF_DAYS*SLOT_PER_DAY):
     time_slots.append(TimeSlot(i))
 
 # create GeneticAlgorithm class and call genetic_algorithm
-genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=100,
-                                                  max_generation=50,
+genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=500,
+                                                  max_generation=10,
                                                   mutation_probability=0.3,
                                                   courses=courses,
                                                   students=students,
@@ -35,5 +34,4 @@ while schedule.fitness == 1:
     schedule = genetic_algo.genetic_algorithm()
     print(schedule.fitness)
 schedule.print()
-convert_csv_to_xlsx(schedule.get_csv_export())
 
