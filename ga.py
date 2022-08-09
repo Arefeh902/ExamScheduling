@@ -1,7 +1,7 @@
 from models import Course, Student, TimeSlot, Schedule
 from typing import Callable
 import random
-from hard_constraints import validate_hard_constraints
+from constraints.hard_constraints import validate_hard_constraints
 
 
 class GeneticAlgorithm:
