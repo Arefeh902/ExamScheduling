@@ -48,3 +48,12 @@ def get_sorted_mean(path_to_input_file: str, include_one: bool = True):
 
     for x in output_list:
         output_file.write(f'{x[0]} {x[1]}\n')
+
+def get_student_time_slots(schedule: Schedule, student: Student) -> list[int]:
+    times: list[int] = []
+    for course in student.courses:
+        times.append(schedule.get_course_time(course).pk)
+
+    times.sort()
+
+    return times
