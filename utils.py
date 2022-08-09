@@ -1,5 +1,6 @@
 import pandas as pd
 
+from models import Schedule, Student
 
 # helper functions - could be moved to utils file
 def convert_xlsx_to_csv(path_to_file: str) -> str:

@@ -17,8 +17,20 @@ def professor_has_tow_exams_in_one_slot(schedule: Schedule, professor: str) -> b
             times.append(schedule.get_course_time(course).pk)
 
     times.sort()
-    
+
     for i in range(1, len(times)):
         if times[i] == times[i-1]:
             return True
     return False
+
+def check_hard_constraints(schedule: Schedule, algorithm_instance) -> bool :
+
+    for student in algorithm_instance.students:
+        if student_has_two_exams_in_one_day(schedule, student):
+            return False
+            
+    for prof in algorithm_instance.professors:
+        if professor_has_tow_exams_in_one_slot(schedule, prof):
+            return False
+
+    return True

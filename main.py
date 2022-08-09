@@ -1,6 +1,6 @@
 from models import Course, Student, TimeSlot, Schedule, SLOT_PER_DAY
 from ga import GeneticAlgorithm
-from constraints import calculate_penalty_of_student
+from soft_constraints import calculate_penalty_of_student
 from read_data import read_student_and_course_data
 
 # load data

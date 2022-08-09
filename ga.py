@@ -1,7 +1,8 @@
 from models import Course, Student, TimeSlot, Schedule
 from typing import Callable
 import random
-from constraints import student_has_two_exams_in_one_day, professor_has_tow_exams_in_one_slot
+from hard_constraints import check_hard_constraints
+    
 
 MAX_FITNESS: int = 100000000
 MAX_RANDOM_TRY: int = 1000
@@ -38,16 +39,12 @@ class GeneticAlgorithm:
     def fitness(self, schedule: Schedule) -> int:
         fit: int = MAX_FITNESS
 
-        # check hard constraints:
-        for student in self.students:
-            if student_has_two_exams_in_one_day(schedule, student):
-                return 1
-        for prof in self.professors:
-            if professor_has_tow_exams_in_one_slot(schedule, prof):
-                return 1
+        if not check_hard_constraints(schedule, self):
+            return 1
 
         for student in self.students:
             fit -= self.calculate_penalty_of_student(schedule, student)
+        
         return fit
 
     @staticmethod

@@ -2,8 +2,6 @@ from models import Student, Schedule
 from models import SLOT_PER_DAY
 from utils import get_student_time_slots
 
-
-# Soft Constraints
 def has_two_consecutive_exams(schedule: Schedule, student: Student) -> int:
     times: list[int] = get_student_time_slots(schedule, student)
     count: int = 0
