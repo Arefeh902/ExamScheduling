@@ -42,7 +42,7 @@ def test_different_params(path_to_input_file: str, num_of_days: int = NUM_OF_DAY
                                                                       calculate_penalty_of_student=
                                                                       calculate_penalty_of_student
                                                                       )
-                    schedule: Schedule = genetic_algo.genetic_algorithm()
+                    schedule: Schedule = genetic_algo.generate_schedule()
 
                     output_file.write(f'{schedule.fitness} ')
 

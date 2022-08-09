@@ -57,7 +57,7 @@ for parameters in hyper_parameters_list:
     )
 
     for _ in range(5):
-        schedule: Schedule = genetic_algo.genetic_algorithm()
+        schedule: Schedule = genetic_algo.generate_schedule()
 
         if schedule.fitness > last_fitness:
             last_fitness = schedule.fitness
