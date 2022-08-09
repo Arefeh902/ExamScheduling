@@ -90,7 +90,7 @@ class GeneticAlgorithm:
         return schedule
 
     def generate_population(self) -> list[Schedule]:
-        return [self.generate_random_solution() for _ in self.population_size]
+        return [self.generate_random_solution() for _ in range(self.population_size)]
 
     def create_pool(self):
         self.pool[1] = self.current_population[0].fitness
