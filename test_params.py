@@ -57,8 +57,5 @@ def test_different_params(path_to_input_file: str, num_of_days: int = NUM_OF_DAY
                     schedule: Schedule = genetic_algo.genetic_algorithm()
                     output_file.write(f'{schedule.fitness} ')
 
-    # TODO: fix bug
+    output_file.close()
     get_sorted_mean(path_to_output_file)
-
-
-test_different_params('data/chem_data.csv')
