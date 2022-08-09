@@ -42,14 +42,14 @@ for parameters in hyper_parameters_list:
     print(parameters)
 
     genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=parameters["population_size"],
-                                                    max_generation=parameters["max_generation"],
-                                                    mutation_probability=parameters["mutation_probability"],
-                                                    courses=courses,
-                                                    students=students,
-                                                    professors=[],
-                                                    time_slots=time_slots,
-                                                    time_slot_per_day=SLOT_PER_DAY,
-                                                    calculate_penalty_of_student=calculate_penalty_of_student
+                                                      max_generation=parameters["max_generation"],
+                                                      mutation_probability=parameters["mutation_probability"],
+                                                      courses=courses,
+                                                      students=students,
+                                                      professors=[],
+                                                      time_slots=time_slots,
+                                                      time_slot_per_day=SLOT_PER_DAY,
+                                                      calculate_penalty_of_student=calculate_penalty_of_student
     )
 
     for _ in range(NUMBER_OF_TRIES):

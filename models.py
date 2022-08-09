@@ -41,6 +41,20 @@ class TimeSlot:
     def __str__(self):
         return f'Day:{self.pk // SLOT_PER_DAY} Slot:{self.pk % SLOT_PER_DAY}'
 
+    def get_day(self):
+        return self.pk // SLOT_PER_DAY
+
+    def __cmp__(self, other):
+        if self.pk <= other.pk:
+            return True
+        return False
+
+    def __lt__(self, other):
+        return self.pk < other.pk
+
+    def __gt__(self, other):
+        return self.pk > other.pk
+
 
 class Schedule:
     time_to_course: dict[TimeSlot: list[Course]]

@@ -1,25 +1,24 @@
-from models import Student, Schedule
-from models import SLOT_PER_DAY
+from models import TimeSlot, Student, Schedule
 from utils import get_student_time_slots
 
 
 def calculate_number_of_two_consecutive_exams(schedule: Schedule, student: Student) -> int:
-    times: list[int] = get_student_time_slots(schedule, student)
+    times: list[TimeSlot] = get_student_time_slots(schedule, student)
     count: int = 0
 
     for i in range(1, len(times)):
-        if times[i] // SLOT_PER_DAY == times[i-1] // SLOT_PER_DAY + 1:
+        if times[i].get_day() == times[i-1].get_day() + 1:
             count += 1
 
     return count
 
 
 def calculate_number_of_three_consecutive_exams(schedule: Schedule, student: Student) -> int:
-    times: list[int] = get_student_time_slots(schedule, student)
+    times: list[TimeSlot] = get_student_time_slots(schedule, student)
     count: int = 0
 
     for i in range(2, len(times)):
-        if times[i-2] // SLOT_PER_DAY == times[i-1] // SLOT_PER_DAY - 1 == times[i] // SLOT_PER_DAY - 2:
+        if times[i-2].get_day() == times[i-1].get_day() - 1 == times[i].get_day() - 2:
             count += 1
 
     return count
@@ -34,11 +33,14 @@ def calculate_number_of_exams_on_holidays(schedule: Schedule, student: Student) 
 
     return count
 
+
 def calculate_number_of_single_day_rest(schedule: Schedule, student: Student) -> int :
     pass
 
+
 def calculate_number_of_two_consecutive_days_rest(schedule: Schedule, student: Student) -> int :
     pass
+
 
 class Penalty:
     TWO_CONSECUTIVE_EXAM = 1000
