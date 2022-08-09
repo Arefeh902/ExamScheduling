@@ -7,7 +7,7 @@ def calculate_number_of_two_consecutive_exams(schedule: Schedule, student: Stude
     count: int = 0
 
     for i in range(1, len(times)):
-        if times[i].get_day() == times[i-1].get_day() + 1:
+        if times[i-1].get_day() == times[i].get_day() - 1:
             count += 1
 
     return count
@@ -35,11 +35,25 @@ def calculate_number_of_exams_on_holidays(schedule: Schedule, student: Student) 
 
 
 def calculate_number_of_single_day_rest(schedule: Schedule, student: Student) -> int :
-    pass
+    times: list[TimeSlot] = get_student_time_slots(schedule, student)
+    count: int = 0
+
+    for i in range(1, len(times)):
+        if times[i-1].get_day() == times[i].get_day() - 2:
+            count += 1
+
+    return count
 
 
 def calculate_number_of_two_consecutive_days_rest(schedule: Schedule, student: Student) -> int :
-    pass
+    times: list[TimeSlot] = get_student_time_slots(schedule, student)
+    count: int = 0
+
+    for i in range(1, len(times)):
+        if times[i - 1].get_day() == times[i].get_day() - 3:
+            count += 1
+
+    return count
 
 
 class Penalty:
@@ -56,5 +70,7 @@ def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
     penalty += Penalty.TWO_CONSECUTIVE_EXAM * calculate_number_of_two_consecutive_exams(schedule, student)
     penalty += Penalty.THREE_CONSECUTIVE_EXAM * calculate_number_of_three_consecutive_exams(schedule, student)
     penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
+    penalty += Penalty.SINGLE_DAY_REST * calculate_number_of_single_day_rest(schedule, student)
+    penalty += Penalty.TWO_CONSECUTIVE_DAYS_REST * calculate_number_of_two_consecutive_days_rest(schedule, student)
 
     return penalty
