@@ -1,7 +1,7 @@
 from models import Course, Student, TimeSlot, Schedule
 from typing import Callable
 import random
-from hard_constraints import check_hard_constraints
+from hard_constraints import validate_hard_constraints
 
 
 class GeneticAlgorithm:
@@ -42,7 +42,7 @@ class GeneticAlgorithm:
     def calculate_fitness(self, schedule: Schedule) -> int:
         fit: int = GeneticAlgorithm.MAX_FITNESS
 
-        if not check_hard_constraints(schedule, self):
+        if not validate_hard_constraints(schedule, self):
             return 1
 
         for student in self.students:

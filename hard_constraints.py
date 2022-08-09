@@ -23,7 +23,7 @@ def professor_has_tow_exams_in_one_slot(schedule: Schedule, professor: str) -> b
             return True
     return False
 
-def check_hard_constraints(schedule: Schedule, algorithm_instance) -> bool :
+def validate_hard_constraints(schedule: Schedule, algorithm_instance) -> bool :
 
     for student in algorithm_instance.students:
         if student_has_two_exams_in_one_day(schedule, student):
