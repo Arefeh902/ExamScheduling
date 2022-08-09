@@ -1,20 +1,13 @@
-from models import Course, Student, TimeSlot, Schedule, SLOT_PER_DAY
+from models import TimeSlot, Schedule, SLOT_PER_DAY
 from ga import GeneticAlgorithm
 from soft_constraints import calculate_penalty_of_student
 from read_data import read_student_and_course_data
 
-# load data
-time_slots: list[TimeSlot] = []
-# courses: list[Course] = []
-# students: list[Student] = []
-professors: list[str] = []
-
-courses, students = read_student_and_course_data('data/naft_data.csv')
-
 NUM_OF_DAYS: int = 12
-for i in range(NUM_OF_DAYS*SLOT_PER_DAY):
-    time_slots.append(TimeSlot(i))
+NUMBER_OF_TRIES: int = 5
 
+time_slots: list[TimeSlot] = [TimeSlot(i) for i in range(NUM_OF_DAYS*SLOT_PER_DAY)]
+professors: list[str] = []
 hyper_parameters_list = [
     {
         "population_size": 600,
@@ -38,6 +31,9 @@ hyper_parameters_list = [
     },
 ]
 
+courses, students = read_student_and_course_data('data/naft_data.csv')
+
+
 last_fitness = 0
 last_schedule = None
 
@@ -56,7 +52,7 @@ for parameters in hyper_parameters_list:
                                                     calculate_penalty_of_student=calculate_penalty_of_student
     )
 
-    for _ in range(5):
+    for _ in range(NUMBER_OF_TRIES):
         schedule: Schedule = genetic_algo.generate_schedule()
 
         if schedule.fitness > last_fitness:
