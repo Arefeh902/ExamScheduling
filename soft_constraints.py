@@ -34,11 +34,19 @@ def calculate_number_of_exams_on_holidays(schedule: Schedule, student: Student) 
 
     return count
 
+def calculate_number_of_single_day_rest(schedule: Schedule, student: Student) -> int :
+    pass
+
+def calculate_number_of_two_consecutive_days_rest(schedule: Schedule, student: Student) -> int :
+    pass
 
 class Penalty:
     TWO_CONSECUTIVE_EXAM = 1000
     THREE_CONSECUTIVE_EXAM = 50000
-    EXAM_ON_HOLIDAY = 10
+    EXAM_ON_HOLIDAY = 1000
+    SINGLE_DAY_REST = 500
+    TWO_CONSECUTIVE_DAYS_REST = 250
+    
 
 def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
     penalty: int = 0
