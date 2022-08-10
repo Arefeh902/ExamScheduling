@@ -90,6 +90,14 @@ The data is important to use the best possible values. We consider the data form
 
 ### Steps
 
+- The first step is to generate a random population, or list of (?) solutions. Each solution is represented by a Schedule class. Every Schedule object is assigned days to hold exams on. For every day we set some slots to put exams in them.
+
+- A fitness value is calculated for each solution in population. Fitness score is based upon hard and soft constraints. If any of the hard constraints fail, the fitness value will be assigned to 1, meaning that it is not a valid solution. If not, for every soft constraint a penalty will be evaluated.
+
+- One the fitness is calculated, the population is passed through for parent selection. This is done using roulette wheel selection. (?)
+
+- . . .
+
 ## Example
 
 ### Sample Dataset
