@@ -1,4 +1,4 @@
-from models import Course, Student, TimeSlot, Schedule
+from models import Course, Student, TimeSlot
 import csv
 
 time_slots: list[TimeSlot] = []
@@ -24,11 +24,6 @@ def read_student_and_course_data(path_to_file: str) -> tuple[list[Course], list[
                 student.courses.append(courses[i-2])
                 courses[i-2].students_ids.append(student_id)
         students.append(student)
-
-    # for course in courses:
-    #     print(course.title, course.students_ids)
-    # for student in students:
-    #     print(student.pk, student.courses)
 
     return courses, students
 

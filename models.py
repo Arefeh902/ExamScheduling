@@ -5,7 +5,7 @@ SLOT_PER_DAY = 3
 class Course:
     title: str
     professor: str
-    students_ids: list[int]  # student ids
+    students_ids: list[int]
 
     def __init__(self, title: str, professor: str, students_ids: list[int]):
         self.title = title
@@ -29,8 +29,8 @@ class Student:
 
 
 class TimeSlot:
-    pk: int              # timeslot pks to find exam distances
-    is_available: bool   # for eliminating restricted dates
+    pk: int
+    is_available: bool
     is_holiday: bool
 
     def __init__(self, pk: int, is_available: bool = True, is_holiday: bool = False):
@@ -46,21 +46,24 @@ class Schedule:
     time_to_course: dict[TimeSlot: list[Course]]
     fitness: int
 
+    def __init__(self, time_slots: list[TimeSlot]):
+        self.time_to_course = dict()
+        for slot in time_slots:
+            self.time_to_course[slot] = list()
+
     def get_course_time(self, course: Course) -> TimeSlot:
         for time in self.time_to_course:
             if course in self.time_to_course[time]:
                 return time
+
+    def get_courses_in_time_slot(self, time: TimeSlot) -> list[Course]:
+        return self.time_to_course[time]
 
     def get_courses(self) -> list[Course]:
         courses: list[Course] = []
         for time in self.time_to_course:
             courses.extend(self.time_to_course[time])
         return courses
-
-    def __init__(self, time_slots: list[TimeSlot]):
-        self.time_to_course = dict()
-        for slot in time_slots:
-            self.time_to_course[slot] = list()
 
     def print(self):
         for time in self.time_to_course:
