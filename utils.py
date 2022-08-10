@@ -10,24 +10,15 @@ def convert_xlsx_to_csv(path_to_file: str) -> str:
     return csv_file_name
 
 
-def get_mean(path_to_input_file: str):
-    input_file = open(path_to_input_file)
-    path_to_output_file: str = ''.join(path_to_input_file.split('.')[:-1]) + '_output.txt'
-    output_file = open(path_to_output_file, 'w')
-
-    lines = input_file.readlines()
-    for i in range(1, len(lines), 2):
-        output_file.write(f'{lines[i]} ')
-
-        l = lines[i + 1].split(' ')[:-1]
-        l = [int(x) for x in l]
-
-        output_file.write(f'{sum(l) / len(l)}\n')
+def convert_csv_to_xlsx(path_to_file: str) -> str:
+    file = pd.read_csv(path_to_file)
+    xlsx_file_name: str = ''.join(path_to_file.split('.')[:-1]) + '.xlsx'
+    file.to_excel(xlsx_file_name, index=None, header=True)
+    return xlsx_file_name
 
 
 def get_sorted_mean(path_to_input_file: str, include_no_result: bool = True):
-    
-    lines = []
+
     with open(path_to_input_file) as input_file:
         lines = input_file.readlines()
 
