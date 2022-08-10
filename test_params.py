@@ -1,7 +1,7 @@
 from models import TimeSlot, Schedule, SLOT_PER_DAY
 from utils import get_sorted_mean
 from ga import GeneticAlgorithm
-from soft_constraints import calculate_penalty_of_student
+from constraints.soft_constraints import calculate_penalty_of_student
 from read_data import read_student_and_course_data
 
 NUM_OF_DAYS: int = 12
