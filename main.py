@@ -1,36 +1,17 @@
-from models import TimeSlot, Schedule, SLOT_PER_DAY
+from models import TimeSlot, Schedule
 from ga import GeneticAlgorithm
 from constraints.soft_constraints import calculate_penalty_of_student
 from read_data import read_student_and_course_data
 from utils import convert_csv_to_xlsx
+from config import get_config_dict
 
-NUM_OF_DAYS: int = 12
-NUMBER_OF_TRIES: int = 5
+from vars import hyper_parameters_list
 
-time_slots: list[TimeSlot] = [TimeSlot(i) for i in range(NUM_OF_DAYS*SLOT_PER_DAY)]
+Config = get_config_dict()
+
+time_slots: list[TimeSlot] = [TimeSlot(i) for i in range(Config["number_of_days"] * Config['number_of_slots_per_day'])]
 professors: list[str] = []
-hyper_parameters_list = [
-    {
-        "population_size": 600,
-        "max_generation": 300,
-        "mutation_probability": 0.9
-    },
-    {
-        "population_size": 600,
-        "max_generation": 300,
-        "mutation_probability": 0.6
-    },
-    {
-        "population_size": 500,
-        "max_generation": 200,
-        "mutation_probability": 0.9
-    },
-    {
-        "population_size": 500,
-        "max_generation": 200,
-        "mutation_probability": 0.6
-    },
-]
+
 
 courses, students = read_student_and_course_data('data/naft_data.csv')
 
@@ -49,11 +30,11 @@ for parameters in hyper_parameters_list:
                                                       students=students,
                                                       professors=[],
                                                       time_slots=time_slots,
-                                                      time_slot_per_day=SLOT_PER_DAY,
+                                                      time_slot_per_day=Config['number_of_slots_per_day'],
                                                       calculate_penalty_of_student=calculate_penalty_of_student
                                                       )
 
-    for _ in range(NUMBER_OF_TRIES):
+    for _ in range(Config["number_of_tries"]):
         schedule: Schedule = genetic_algo.generate_schedule()
 
         if schedule.fitness > last_fitness:
