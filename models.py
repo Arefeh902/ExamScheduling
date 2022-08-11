@@ -1,6 +1,8 @@
 import csv
+from config import get_config_dict
 
-SLOT_PER_DAY = 3
+Config = get_config_dict()
+SLOT_PER_DAY = Config['number_of_slots_per_day']
 
 
 class Course:
