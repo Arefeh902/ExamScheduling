@@ -11,8 +11,8 @@ Config = get_config_dict()
 
 time_slots: list[TimeSlot] = [TimeSlot(i) for i in range(Config["number_of_days"] * Config['number_of_slots_per_day'])]
 
-courses, students = read_student_and_course_data('data/naft_data.csv')
-professors: list[str] = read_professor_data('data/professors.txt', courses)
+courses, students = read_student_and_course_data(Config['student_data_path'])
+professors: list[str] = read_professor_data(Config['professor_data_path'], courses)
 
 
 last_fitness = 0
