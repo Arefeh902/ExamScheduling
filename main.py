@@ -10,10 +10,9 @@ from vars import hyper_parameters_list
 Config = get_config_dict()
 
 time_slots: list[TimeSlot] = [TimeSlot(i) for i in range(Config["number_of_days"] * Config['number_of_slots_per_day'])]
-professors: list[str] = []
 
 courses, students = read_student_and_course_data('data/naft_data.csv')
-professors: list[Professor] = read_professor_data('data/professors.txt')
+professors: list[str] = read_professor_data('data/professors.txt', courses)
 
 
 last_fitness = 0

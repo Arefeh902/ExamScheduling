@@ -19,6 +19,14 @@ class Course:
         return self.title
 
     @staticmethod
+    def get_course_by_title(courses, title: str):
+        for course in courses:
+            if course.title == title:
+                return course
+        return None
+
+
+    @staticmethod
     def join_course_titles(courses) -> str:
         res: str = ''
         for course in courses:
@@ -36,23 +44,6 @@ class Student:
 
     def __str__(self):
         return str(self.pk)
-
-class Professor:
-    pk: int
-    name: str
-    courses: list[Course]
-
-    def __init__(self, pk, name, courses: list[Course]) -> None:
-
-        self.pk = pk
-        self.name = name
-        self.courses = courses
-
-    def __str__(self) -> str:
-        return f"Name: {self.name} Id: {self.pk}"
-
-    def __repr__(self) -> str:
-        return f"Name: {self.name} Id: {self.pk}"
 
 
 class TimeSlot:

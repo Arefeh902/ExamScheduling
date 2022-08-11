@@ -1,8 +1,5 @@
-from models import Course, Professor, Student, TimeSlot
+from models import Course, Student
 import csv
-
-time_slots: list[TimeSlot] = []
-professors: list[str] = []
 
 
 def read_student_and_course_data(path_to_file: str) -> tuple[list[Course], list[Student]]:
@@ -30,16 +27,13 @@ def read_student_and_course_data(path_to_file: str) -> tuple[list[Course], list[
     return courses, students
 
 
-def read_professor_data(path_to_file: str) -> list[Professor]:
+def read_professor_data(path_to_file: str, all_courses: list[Course]) -> list[str]:
 
     lines: list[str] = []
     with open(path_to_file) as file:
         lines = file.readlines()
 
-    # data format:
-    # professor_name, course1, course2...
-
-    professors: list[Professor] = []
+    professors: list[str] = []
 
     for i in range(len(lines)):
         line = lines[i]
@@ -47,8 +41,10 @@ def read_professor_data(path_to_file: str) -> list[Professor]:
         _list = line.split(",")
         professor_name, courses_list = _list[0], _list[1:]
 
-        course_models = [Course(name, professor_name, []) for name in courses_list]
+        for course in all_courses:
+            if course.title in courses_list:
+                course.professor = professor_name
 
-        professors.append(Professor(i+1, professor_name, course_models))
+        professors.append(professor_name)
     
     return professors
