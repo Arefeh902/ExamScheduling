@@ -1,14 +1,13 @@
-from models import TimeSlot, Schedule, SLOT_PER_DAY
+from models import Professor, TimeSlot, Schedule, SLOT_PER_DAY
 from ga import GeneticAlgorithm
 from constraints.soft_constraints import calculate_penalty_of_student
-from read_data import read_student_and_course_data
+from read_data import read_professor_data, read_student_and_course_data
 from utils import convert_csv_to_xlsx
 
 NUM_OF_DAYS: int = 12
 NUMBER_OF_TRIES: int = 5
 
 time_slots: list[TimeSlot] = [TimeSlot(i) for i in range(NUM_OF_DAYS*SLOT_PER_DAY)]
-professors: list[str] = []
 hyper_parameters_list = [
     {
         "population_size": 600,
@@ -33,6 +32,7 @@ hyper_parameters_list = [
 ]
 
 courses, students = read_student_and_course_data('data/naft_data.csv')
+professors: list[Professor] = read_professor_data('data/professors.txt')
 
 
 last_fitness = 0
@@ -47,7 +47,7 @@ for parameters in hyper_parameters_list:
                                                       mutation_probability=parameters["mutation_probability"],
                                                       courses=courses,
                                                       students=students,
-                                                      professors=[],
+                                                      professors=professors,
                                                       time_slots=time_slots,
                                                       time_slot_per_day=SLOT_PER_DAY,
                                                       calculate_penalty_of_student=calculate_penalty_of_student
