@@ -20,7 +20,9 @@ last_schedule = None
 
 for parameters in hyper_parameters_list:
 
-    print(parameters)
+    for header in parameters:
+        print(f'{header}: {parameters[header]}, ', end='')
+    print()
 
     genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=parameters["population_size"],
                                                       max_generation=parameters["max_generation"],
@@ -40,9 +42,8 @@ for parameters in hyper_parameters_list:
             last_fitness = schedule.fitness
             last_schedule = schedule
 
-        print(schedule.fitness)
+        print(f'try: {_+1}\n\tfitness: {schedule.fitness}')
 
-    print('---------------')
+    print('----------------------------')
 
-schedule.print()
 convert_csv_to_xlsx(schedule.get_csv_export())
