@@ -1,4 +1,4 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_socketio import SocketIO
 from models import Course, Student, TimeSlot, Schedule
 from read_data import read_courses_data, read_students_data, read_professors_data, read_time_slots_data
@@ -50,4 +50,4 @@ def get_schedule():
         print('----------------------------')
 
     last_schedule.print()
-    return "<p>Hello, World!</p>"
+    return jsonify(last_schedule.to_json())

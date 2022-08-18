@@ -1,4 +1,5 @@
 import csv
+import json
 from config import get_config_dict
 
 Config = get_config_dict()
@@ -155,3 +156,10 @@ class Schedule:
             writer.writerow(data)
 
         return export_file_path
+
+    def to_json(self):
+        time_slot_pks_to_courses = {}
+        for time in self.time_to_course:
+            time_slot_pks_to_courses[time.pk] = self.time_to_course[time]
+        return json.dumps(time_slot_pks_to_courses, default=lambda o: o.__dict__,
+                          sort_keys=True, indent=4)
