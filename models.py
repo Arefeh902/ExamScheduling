@@ -110,7 +110,7 @@ class Schedule:
     def get_course_time_by_id(self, course_id: int) -> TimeSlot:
         for time in self.time_to_course:
             for course in self.time_to_course[time]:
-                if course_id in course:
+                if course_id == course.pk:
                     return time
 
     def get_courses_in_time_slot(self, time: TimeSlot) -> list[Course]:

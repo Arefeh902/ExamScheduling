@@ -69,7 +69,7 @@ def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
 
     penalty += Penalty.TWO_CONSECUTIVE_EXAM * calculate_number_of_two_consecutive_exams(schedule, student)
     penalty += Penalty.THREE_CONSECUTIVE_EXAM * calculate_number_of_three_consecutive_exams(schedule, student)
-    # penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
+    penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
     penalty += Penalty.SINGLE_DAY_REST * calculate_number_of_single_day_rest(schedule, student)
     penalty += Penalty.TWO_CONSECUTIVE_DAYS_REST * calculate_number_of_two_consecutive_days_rest(schedule, student)
 

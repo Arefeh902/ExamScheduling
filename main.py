@@ -28,6 +28,8 @@ def get_schedule():
             print(f'{header}: {parameters[header]}, ', end='')
         print()
 
+        socketio.emit("params", {"message": parameters}, broadcast=False)
+
         genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=parameters["population_size"],
                                                           max_generation=parameters["max_generation"],
                                                           mutation_probability=parameters["mutation_probability"],
@@ -46,6 +48,7 @@ def get_schedule():
                 last_fitness = schedule.fitness
                 last_schedule = schedule
 
+            socketio.emit("display fitness", {"message": f"try: {_ + 1}\tfitness: {schedule.fitness}"}, broadcast=False)
             print(f'try: {_ + 1}\n\tfitness: {schedule.fitness}')
 
         print('----------------------------')
