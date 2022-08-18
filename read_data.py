@@ -2,6 +2,34 @@ from models import Course, Student
 import csv
 
 
+def read_courses_data(courses) -> list[Course]:
+    courses_list: list[Course] = []
+    for course in courses:
+        courses_list.append(Course(course["id"], course["title"], "", []))
+    return courses_list
+
+
+def read_students_data(students, courses) -> list[Student]:
+    students_list: list[students] = []
+    for student in students:
+        students_list.append(Student(student.pk, student.courses))
+        for course_id in student.courses:
+            course: Course = Course.get_course_by_id(courses, course_id)
+            course.students_ids.append(student.pk)
+    return students_list
+
+
+def read_professors_data(professors, courses) -> list[str]:
+    professors_list: list[str] = []
+    for prof in professors:
+        prof_name = prof["name"]
+        professors_list.append(prof_name)
+        for course_id in prof["courses"]:
+            course: Course = Course.get_course_by_id(courses, course_id)
+            course.professor = prof_name
+    return professors_list
+
+
 def read_student_and_course_data(path_to_file: str) -> tuple[list[Course], list[Student]]:
     courses: list[Course] = []
     students: list[Student] = []
@@ -10,15 +38,17 @@ def read_student_and_course_data(path_to_file: str) -> tuple[list[Course], list[
     csv_reader = csv.reader(file)
 
     courses_names = next(csv_reader)
+    pk: int = 1
     for name in courses_names[2:]:
-        courses.append(Course(name, '', []))
+        courses.append(Course(pk, name, '', []))
+        pk += 1
 
     for row in csv_reader:
         student_id: int = int(row[1])
         student: Student = Student(student_id, [])
         for i in range(2, len(row)):
             if row[i] != '':
-                student.courses.append(courses[i-2])
+                student.courses.append(courses[i-2].pk)
                 courses[i-2].students_ids.append(student_id)
         students.append(student)
 

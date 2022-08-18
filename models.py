@@ -9,8 +9,10 @@ class Course:
     title: str
     professor: str
     students_ids: list[int]
+    pk: int
 
-    def __init__(self, title: str, professor: str, students_ids: list[int]):
+    def __init__(self, pk: int, title: str, professor: str, students_ids: list[int]):
+        self.pk = pk
         self.title = title
         self.professor = professor
         self.students_ids = students_ids
@@ -25,6 +27,12 @@ class Course:
                 return course
         return None
 
+    @staticmethod
+    def get_course_by_id(courses, pk: int):
+        for course in courses:
+            if course.pk == pk:
+                return course
+        return None
 
     @staticmethod
     def join_course_titles(courses) -> str:
@@ -36,9 +44,9 @@ class Course:
 
 class Student:
     pk: int
-    courses: list[Course]
+    courses: list[int]
 
-    def __init__(self, pk: int, courses: list[Course]):
+    def __init__(self, pk: int, courses: list[int]):
         self.pk = pk
         self.courses = courses
 
@@ -75,7 +83,7 @@ class TimeSlot:
 
 
 class Schedule:
-    time_to_course: dict[TimeSlot: list[Course]]
+    time_to_course: dict[TimeSlot: int]
     fitness: int
 
     def __init__(self, time_slots: list[TimeSlot]):
@@ -83,16 +91,16 @@ class Schedule:
         for slot in time_slots:
             self.time_to_course[slot] = list()
 
-    def get_course_time(self, course: Course) -> TimeSlot:
+    def get_course_time(self, course_id: int) -> TimeSlot:
         for time in self.time_to_course:
-            if course in self.time_to_course[time]:
+            if course_id in self.time_to_course[time]:
                 return time
 
-    def get_courses_in_time_slot(self, time: TimeSlot) -> list[Course]:
+    def get_courses_in_time_slot(self, time: TimeSlot) -> list[int]:
         return self.time_to_course[time]
 
-    def get_courses(self) -> list[Course]:
-        courses: list[Course] = []
+    def get_courses(self) -> list[int]:
+        courses: list[int] = []
         for time in self.time_to_course:
             courses.extend(self.time_to_course[time])
         return courses

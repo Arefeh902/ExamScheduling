@@ -1,49 +1,18 @@
-from models import TimeSlot, Schedule
-from ga import GeneticAlgorithm
-from constraints.soft_constraints import calculate_penalty_of_student
-from read_data import read_professor_data, read_student_and_course_data
-from utils import convert_csv_to_xlsx
-from config import get_config_dict
-from vars import hyper_parameters_list
+from flask import Flask, request
+from flask_socketio import SocketIO
+from models import Course, Student, TimeSlot
+from read_data import read_courses_data, read_students_data, read_professors_data
+
+app = Flask("Exam Scheduling")
+socketio = SocketIO(app)
 
 
-Config = get_config_dict()
+@app.post("/get-schedule/")
+def get_schedule():
+    content = request.get_json()
+    courses: list[Course] = read_courses_data(content["courses"])
+    students: list[Student] = read_students_data(content["students"], courses)
+    professors: list[str] = read_professors_data(content["professor"], courses)
+    # time_slots: list[TimeSlot] = read_time_slot_data(content["time_slots"])
 
-time_slots: list[TimeSlot] = [TimeSlot(i) for i in range(Config["number_of_days"] * Config['number_of_slots_per_day'])]
-
-courses, students = read_student_and_course_data('data/naft_data.csv')
-professors: list[str] = read_professor_data('data/professors.txt', courses)
-
-
-last_fitness = 0
-last_schedule = None
-
-for parameters in hyper_parameters_list:
-
-    for header in parameters:
-        print(f'{header}: {parameters[header]}, ', end='')
-    print()
-
-    genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=parameters["population_size"],
-                                                      max_generation=parameters["max_generation"],
-                                                      mutation_probability=parameters["mutation_probability"],
-                                                      courses=courses,
-                                                      students=students,
-                                                      professors=professors,
-                                                      time_slots=time_slots,
-                                                      time_slot_per_day=Config['number_of_slots_per_day'],
-                                                      calculate_penalty_of_student=calculate_penalty_of_student
-                                                      )
-
-    for _ in range(Config["number_of_tries"]):
-        schedule: Schedule = genetic_algo.generate_schedule()
-
-        if schedule.fitness > last_fitness:
-            last_fitness = schedule.fitness
-            last_schedule = schedule
-
-        print(f'try: {_+1}\n\tfitness: {schedule.fitness}')
-
-    print('----------------------------')
-
-convert_csv_to_xlsx(schedule.get_csv_export())
+    return "<p>Hello, World!</p>"

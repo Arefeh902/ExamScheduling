@@ -27,8 +27,8 @@ def calculate_number_of_three_consecutive_exams(schedule: Schedule, student: Stu
 def calculate_number_of_exams_on_holidays(schedule: Schedule, student: Student) -> int:
     count: int = 0
 
-    for course in student.courses:
-        if schedule.get_course_time(course).is_holiday:
+    for course_id in student.courses:
+        if schedule.get_course_time(course_id).is_holiday:
             count += 1
 
     return count
@@ -69,7 +69,7 @@ def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
 
     penalty += Penalty.TWO_CONSECUTIVE_EXAM * calculate_number_of_two_consecutive_exams(schedule, student)
     penalty += Penalty.THREE_CONSECUTIVE_EXAM * calculate_number_of_three_consecutive_exams(schedule, student)
-    penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
+    # penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
     penalty += Penalty.SINGLE_DAY_REST * calculate_number_of_single_day_rest(schedule, student)
     penalty += Penalty.TWO_CONSECUTIVE_DAYS_REST * calculate_number_of_two_consecutive_days_rest(schedule, student)
 

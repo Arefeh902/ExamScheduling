@@ -1,6 +1,6 @@
 import pandas as pd
 from statistics import mean
-from models import Schedule, Student, TimeSlot
+from models import Schedule, Student, TimeSlot, Course
 
 
 def convert_xlsx_to_csv(path_to_file: str) -> str:
@@ -46,8 +46,8 @@ def get_sorted_mean(path_to_input_file: str, include_no_result: bool = True):
 def get_student_time_slots(schedule: Schedule, student: Student) -> list[TimeSlot]:
     times: list[TimeSlot] = []
 
-    for course in student.courses:
-        times.append(schedule.get_course_time(course))
+    for course_id in student.courses:
+        times.append(schedule.get_course_time(Course.get_course_by_id(schedule.get_courses(), course_id)))
 
     times.sort()
 
