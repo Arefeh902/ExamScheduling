@@ -16,6 +16,7 @@ def get_schedule():
     students: list[Student] = read_students_data(content["students"], courses)
     professors: list[str] = read_professors_data(content["professors"], courses)
     time_slots: list[TimeSlot] = read_time_slots_data(content["time_slots"])
+    available_time_slots = TimeSlot.get_available_time_slots(time_slots)
     hyper_parameters_list: list[dict[str, int]] = content["hyper_parameters_list"]
 
     last_fitness = 0
@@ -33,7 +34,7 @@ def get_schedule():
                                                           courses=courses,
                                                           students=students,
                                                           professors=professors,
-                                                          time_slots=time_slots,
+                                                          time_slots=available_time_slots,
                                                           time_slot_per_day=content['number_of_slots_per_day'],
                                                           calculate_penalty_of_student=calculate_penalty_of_student
                                                           )

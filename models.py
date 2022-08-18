@@ -64,7 +64,7 @@ class TimeSlot:
     is_holiday: bool
 
     def get_day(self):
-        return self.pk // SLOT_PER_DAY
+        return (self.pk - 1) // SLOT_PER_DAY
 
     def __init__(self, pk: int, is_available: bool = True, is_holiday: bool = False):
         self.pk = pk
@@ -87,6 +87,10 @@ class TimeSlot:
 
     def __gt__(self, other):
         return self.pk > other.pk
+
+    @staticmethod
+    def get_available_time_slots(time_slots):
+        return [time for time in time_slots if time.is_available]
 
 
 class Schedule:

@@ -63,11 +63,11 @@ class GeneticAlgorithm:
             slot: TimeSlot = random.choice(self.time_slots)
 
             for _ in range(GeneticAlgorithm.MAX_RANDOM_TRY):
-                day: int = slot.pk // self.time_slots_per_day
+                day: int = slot.get_day()
                 same_day_slots: list[TimeSlot] = []
 
                 for i in range(self.time_slots_per_day):
-                    same_day_slots.append(self.get_slot_by_pk(day + i))
+                    same_day_slots.append(self.get_slot_by_pk(day + i + 1))
 
                 have_intersection: bool = False
                 for day_ in same_day_slots:
