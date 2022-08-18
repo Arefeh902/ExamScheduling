@@ -20,6 +20,9 @@ class Course:
     def __str__(self):
         return self.title
 
+    def __repr__(self):
+        return self.title
+
     @staticmethod
     def get_course_by_title(courses, title: str):
         for course in courses:
@@ -59,6 +62,9 @@ class TimeSlot:
     is_available: bool
     is_holiday: bool
 
+    def get_day(self):
+        return self.pk // SLOT_PER_DAY
+
     def __init__(self, pk: int, is_available: bool = True, is_holiday: bool = False):
         self.pk = pk
         self.is_available = is_available
@@ -67,8 +73,8 @@ class TimeSlot:
     def __str__(self):
         return f'Day:{self.pk // SLOT_PER_DAY} Slot:{self.pk % SLOT_PER_DAY}'
 
-    def get_day(self):
-        return self.pk // SLOT_PER_DAY
+    def __repr__(self):
+        return f'Day:{self.pk // SLOT_PER_DAY} Slot:{self.pk % SLOT_PER_DAY}'
 
     def __cmp__(self, other):
         if self.pk <= other.pk:
@@ -83,7 +89,7 @@ class TimeSlot:
 
 
 class Schedule:
-    time_to_course: dict[TimeSlot: int]
+    time_to_course: dict[TimeSlot: Course]
     fitness: int
 
     def __init__(self, time_slots: list[TimeSlot]):
@@ -91,16 +97,24 @@ class Schedule:
         for slot in time_slots:
             self.time_to_course[slot] = list()
 
-    def get_course_time(self, course_id: int) -> TimeSlot:
+    def get_course_time(self, course: Course) -> TimeSlot:
         for time in self.time_to_course:
-            if course_id in self.time_to_course[time]:
+            if course in self.time_to_course[time]:
                 return time
 
-    def get_courses_in_time_slot(self, time: TimeSlot) -> list[int]:
+    def get_course_time_by_id(self, course_id: int) -> TimeSlot:
+        for time in self.time_to_course:
+            for course in self.time_to_course[time]:
+                if course_id in course:
+                    return time
+
+    def get_courses_in_time_slot(self, time: TimeSlot) -> list[Course]:
+        if not time:
+            return []
         return self.time_to_course[time]
 
-    def get_courses(self) -> list[int]:
-        courses: list[int] = []
+    def get_courses(self) -> list[Course]:
+        courses: list[Course] = []
         for time in self.time_to_course:
             courses.extend(self.time_to_course[time])
         return courses

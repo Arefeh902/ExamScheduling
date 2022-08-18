@@ -28,7 +28,7 @@ def calculate_number_of_exams_on_holidays(schedule: Schedule, student: Student) 
     count: int = 0
 
     for course_id in student.courses:
-        if schedule.get_course_time(course_id).is_holiday:
+        if schedule.get_course_time_by_id(course_id).is_holiday:
             count += 1
 
     return count
