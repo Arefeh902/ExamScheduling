@@ -165,5 +165,6 @@ class Schedule:
         time_slot_pks_to_courses = {}
         for time in self.time_to_course:
             time_slot_pks_to_courses[time.pk] = self.time_to_course[time]
-        return json.dumps(time_slot_pks_to_courses, default=lambda o: o.__dict__,
+        data = {"schedule": time_slot_pks_to_courses, "fitness": self.fitness}
+        return json.dumps(data, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
