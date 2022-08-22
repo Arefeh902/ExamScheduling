@@ -9,7 +9,6 @@ from utils import convert_csv_to_xlsx
 
 app = Flask("Exam Scheduling")
 CORS(app)
-socketio = SocketIO(app)
 
 
 @app.post("/")
