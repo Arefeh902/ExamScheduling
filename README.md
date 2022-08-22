@@ -38,7 +38,7 @@ After many generations, the algorithm tries to make a solution that satisfies ou
 
 - Each exam will be ? hours
 
-- The higher the fitness score, the better solution
+- The higher the fitness score, the better the solution
 
 ### Hyper parameters
 
@@ -57,16 +57,19 @@ After many generations, the algorithm tries to make a solution that satisfies ou
   2. No teacher should have more than one exam in a day
 
 - Soft Constraints:
+  1. Two consecutive exams has a penalty of 
+  
+  2. Three consecutive exams has a penalty of
 
-  1. No two or three consecutive exams are allowed
-
-  2. In two consecutive exams, there should be a single day rest
-
-  3. There should not be exams in holidays
-
+  3. Having an exam on a holiday has a penalty of
+  
+  4. Single day rest between exams has a penalty of
+  
+  5. Two day rest between exams has a penalty of
+  
 ### User-Defined classes
 
-- Course: stores `teacher`, `title` and list of `student ids`.
+- Course: stores `title`, `professor` and list of `student ids`.
 
 - Student: stores list of `courses`
 
@@ -75,6 +78,26 @@ After many generations, the algorithm tries to make a solution that satisfies ou
 - Schedule: stores `time_to_course` and `course_to_time`
 
 ### Steps
+
+#### Reading input data
+
+The input are read from two separate files with data regarding:
+  1. which courses each student is enrolled in
+  2. which courses does each professor teach
+  
+#### Run the Genetic Algorithm
+
+For this problem we are using `Genetic Algorithm` to find a good solution.
+The algorithm is as follows:
+  1. Generate a set of N random solutions. This set is called a population
+  2. Repeat:
+     1. calculate how good each solution in the population. This value is called fitness.
+     2. pick two solutions at random with weights proportional to each schedule's fitness.
+     3. crossover the two chosen solutions and create a new solution
+     4. mutate the chosen the new solution (this is to accumulate for lack of verity in out initial population)
+     5. repeat this process N times to get a new population
+  3. Report best found solution
+
 
 ## Example
 
