@@ -2,9 +2,13 @@
 
 The problem of some universities in exam scheduling is they can not find a good (or probably best) schedule solution for exams. It is so important for both students and teachers to be satisfied with the schedule. In this project, with the help of `Genetic Algorithm`, we are going to find a good solution to fit courses in the best way.
 
+## Live Demo
+
+[exam-scheduling.vercel.app](https://exam-scheduling.vercel.app/)
+
 ## Installation
 
-[Github Repo](https://github.com/Arefeh902/ExamScheduling)
+Backend Repo: https://github.com/Arefeh902/ExamScheduling
 
 Python is used for the algorithm, so you must have [python](https://www.python.org/) installed in your system.
 
@@ -14,15 +18,15 @@ Install the requirements:
 pip install -r requirements.txt
 ```
 
-For dataset, put the BLOB.txt and BLOB2.txt near the program.
-
-Then run:
+Then:
 
 ```
 python main.py
 ```
 
-Execution takes some time, so just wait for the results.
+To execute the program, you should also run frontend project.
+
+Frontend Repo: https://github.com/AmirHosein-Gharaati/ExamScheduling
 
 ## Description
 
@@ -44,11 +48,11 @@ After many generations, the algorithm tries to make a solution that satisfies ou
 
 ### Hyper parameters
 
-- Population size: Default to 1000
+- Population size
 
-- Maximum of Generation: Default to 500
+- Maximum of Generation
 
-- Mutation Probability: Default to 0.001
+- Mutation Probability
 
 ### Constraints
 
@@ -103,16 +107,20 @@ The algorithm is as follows:
    5. repeat this process N times to get a new population
 3. Report best found solution
 
-## Example
-
-### Sample Dataset
-
-### Output
-
 ## References
+
+https://github.com/HxnDev/Exam-Scheduler-Generator-Using-Genetic-Algorithm
+
+https://youtu.be/4XZoVQOt-0I
+
+https://youtu.be/9zfeTw-uFCw
 
 ## About Us
 
 Arefeh Ahmadi
 
+Github:https://github.com/Arefeh902
+
 Amirhosein Gharaati
+
+Github: https://github.com/AmirHosein-Gharaati
