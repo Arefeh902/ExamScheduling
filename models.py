@@ -134,8 +134,8 @@ class Schedule:
             for c in self.time_to_course[time]:
                 print(c, end=' ')
             print()
-            if time.pk % self.SLOT_PER_DAY == self.SLOT_PER_DAY - 1:
-                print()
+            if time.get_slot() == self.SLOT_PER_DAY - 1:
+               print()
 
     def get_csv_export(self, file_name: str = 'schedule.csv') -> str:
         export_file_path = f'schedules/{file_name}'
