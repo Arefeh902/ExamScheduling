@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from flask_socketio import SocketIO
 from models import Course, Student, TimeSlot, Schedule
 from read_data import read_courses_data, read_students_data, read_professors_data, read_time_slots_data
@@ -6,10 +7,11 @@ from ga import GeneticAlgorithm
 from constraints.soft_constraints import calculate_penalty_of_student
 
 app = Flask("Exam Scheduling")
+CORS(app)
 socketio = SocketIO(app)
 
 
-@app.post("/get-schedule/")
+@app.post("/")
 def get_schedule():
     content = request.get_json()
     courses: list[Course] = read_courses_data(content["courses"])
@@ -55,3 +57,5 @@ def get_schedule():
 
     last_schedule.print()
     return jsonify(last_schedule.to_json())
+
+app.run()
