@@ -63,5 +63,3 @@ def get_schedule():
     # convert_csv_to_xlsx(last_schedule.get_csv_export())
     return last_schedule.to_json()
 
-
-app.run()
