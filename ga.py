@@ -1,7 +1,7 @@
 from models import Course, Student, TimeSlot, Schedule
 from typing import Callable
 import random
-from hard_constraints import validate_hard_constraints
+from constraints.hard_constraints import validate_hard_constraints
 
 
 class GeneticAlgorithm:
@@ -17,6 +17,7 @@ class GeneticAlgorithm:
                  students: list[Student],
                  professors: list[str],
                  time_slots: list[TimeSlot],
+                 available_time_slots: list[TimeSlot],
                  time_slot_per_day: int,
                  calculate_penalty_of_student: Callable[[Schedule, Student], int]
                  ):
@@ -27,6 +28,7 @@ class GeneticAlgorithm:
         self.students = students
         self.professors = professors
         self.time_slots = time_slots
+        self.available_time_slots = available_time_slots
         self.time_slots_per_day = time_slot_per_day
         self.calculate_penalty_of_student = calculate_penalty_of_student
         self.num_of_time_slots = len(time_slots)
@@ -51,7 +53,7 @@ class GeneticAlgorithm:
         return fit
 
     def get_slot_by_pk(self, pk: int) -> TimeSlot:
-        for slot in self.time_slots:
+        for slot in self.available_time_slots:
             if slot.pk == pk:
                 return slot
         return None
@@ -60,14 +62,14 @@ class GeneticAlgorithm:
         schedule: Schedule = Schedule(self.time_slots)
 
         for course in self.courses:
-            slot: TimeSlot = random.choice(self.time_slots)
+            slot: TimeSlot = random.choice(self.available_time_slots)
 
             for _ in range(GeneticAlgorithm.MAX_RANDOM_TRY):
-                day: int = slot.pk // self.time_slots_per_day
+                day: int = slot.get_day()
                 same_day_slots: list[TimeSlot] = []
 
                 for i in range(self.time_slots_per_day):
-                    same_day_slots.append(self.get_slot_by_pk(day + i))
+                    same_day_slots.append(self.get_slot_by_pk(day + i + 1))
 
                 have_intersection: bool = False
                 for day_ in same_day_slots:
@@ -83,7 +85,7 @@ class GeneticAlgorithm:
                 if not have_intersection:
                     break
 
-                slot = random.choice(self.time_slots)
+                slot = random.choice(self.available_time_slots)
 
             schedule.get_courses_in_time_slot(slot).append(course)
 
@@ -117,7 +119,7 @@ class GeneticAlgorithm:
 
     def crossover(self) -> Schedule:
         parent_a, parent_b = self.get_parents()
-        schedule: Schedule = Schedule(self.time_slots)
+        schedule: Schedule = Schedule(self.available_time_slots)
 
         for course in self.courses:
 
@@ -134,7 +136,7 @@ class GeneticAlgorithm:
         for course in self.courses:
             if random.uniform(0, 1) < self.mutation_probability:
                 schedule.time_to_course[schedule.get_course_time(course)].remove(course)
-                slot: TimeSlot = random.choice(self.time_slots)
+                slot: TimeSlot = random.choice(self.available_time_slots)
                 schedule.get_courses_in_time_slot(slot).append(course)
 
         return schedule

@@ -1,19 +1,20 @@
-from models import TimeSlot, Schedule, SLOT_PER_DAY
+from models import TimeSlot, Schedule
 from utils import get_sorted_mean
 from ga import GeneticAlgorithm
-from soft_constraints import calculate_penalty_of_student
+from constraints.soft_constraints import calculate_penalty_of_student
 from read_data import read_student_and_course_data
+from config import get_config_dict
 
-NUM_OF_DAYS: int = 12
+Config = get_config_dict()
+
 NUM_OF_RUNNING = 10
 
-
-def test_different_params(path_to_input_file: str, num_of_days: int = NUM_OF_DAYS):
+def test_different_params(path_to_input_file: str, num_of_days: int = Config['number_of_days']):
     professors: list[str] = []
 
     courses, students = read_student_and_course_data(path_to_input_file)
 
-    time_slots: list[TimeSlot] = [TimeSlot(id) for id in range(num_of_days*SLOT_PER_DAY)]
+    time_slots: list[TimeSlot] = [TimeSlot(id) for id in range(num_of_days * Config['number_of_slots_per_day'])]
     population_sizes: list[int] = [i for i in range(100, 601, 100)]
     max_generations: list[int] = [i for i in range(100, 301, 100)]
     mutation_probs: list[float] = [i/10 for i in range(4, 10)]
@@ -38,7 +39,7 @@ def test_different_params(path_to_input_file: str, num_of_days: int = NUM_OF_DAY
                                                                       students=students,
                                                                       professors=professors,
                                                                       time_slots=time_slots,
-                                                                      time_slot_per_day=SLOT_PER_DAY,
+                                                                      time_slot_per_day=Config['number_of_slots_per_day'],
                                                                       calculate_penalty_of_student=
                                                                       calculate_penalty_of_student
                                                                       )

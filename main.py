@@ -1,65 +1,66 @@
-from models import TimeSlot, Schedule, SLOT_PER_DAY
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+from flask_socketio import SocketIO
+from models import Course, Student, TimeSlot, Schedule
+from read_data import read_courses_data, read_students_data, read_professors_data, read_time_slots_data
 from ga import GeneticAlgorithm
-from soft_constraints import calculate_penalty_of_student
-from read_data import read_student_and_course_data
+from constraints.soft_constraints import calculate_penalty_of_student
 
-NUM_OF_DAYS: int = 12
-NUMBER_OF_TRIES: int = 5
-
-time_slots: list[TimeSlot] = [TimeSlot(i) for i in range(NUM_OF_DAYS*SLOT_PER_DAY)]
-professors: list[str] = []
-hyper_parameters_list = [
-    {
-        "population_size": 600,
-        "max_generation": 300,
-        "mutation_probability": 0.9
-    },
-    {
-        "population_size": 600,
-        "max_generation": 300,
-        "mutation_probability": 0.6
-    },
-    {
-        "population_size": 500,
-        "max_generation": 200,
-        "mutation_probability": 0.9
-    },
-    {
-        "population_size": 500,
-        "max_generation": 200,
-        "mutation_probability": 0.6
-    },
-]
-
-courses, students = read_student_and_course_data('data/naft_data.csv')
+app = Flask("Exam Scheduling")
+CORS(app)
+socketio = SocketIO(app)
 
 
-last_fitness = 0
-last_schedule = None
+@app.post("/")
+def get_schedule():
+    content = request.get_json()
+    courses: list[Course] = read_courses_data(content["courses"])
+    students: list[Student] = read_students_data(content["students"], courses)
+    professors: list[str] = read_professors_data(content["professors"], courses)
+    time_slots: list[TimeSlot] = read_time_slots_data(content["time_slots"])
+    available_time_slots = TimeSlot.get_available_time_slots(time_slots)
+    hyper_parameters_list: list[dict[str, int]] = content["hyper_parameters_list"]
+    slot_per_day: int = content['number_of_slots_per_day']
+    Schedule.SLOT_PER_DAY = slot_per_day
+    TimeSlot.SLOT_PER_DAY = slot_per_day
 
-for parameters in hyper_parameters_list:
+    last_fitness = 0
+    last_schedule = None
 
-    print(parameters)
+    for parameters in hyper_parameters_list:
 
-    genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=parameters["population_size"],
-                                                    max_generation=parameters["max_generation"],
-                                                    mutation_probability=parameters["mutation_probability"],
-                                                    courses=courses,
-                                                    students=students,
-                                                    professors=[],
-                                                    time_slots=time_slots,
-                                                    time_slot_per_day=SLOT_PER_DAY,
-                                                    calculate_penalty_of_student=calculate_penalty_of_student
-    )
+        for header in parameters:
+            print(f'{header}: {parameters[header]}, ', end='')
+        print()
 
-    for _ in range(NUMBER_OF_TRIES):
-        schedule: Schedule = genetic_algo.generate_schedule()
+        socketio.emit("params", {"message": parameters}, broadcast=False)
 
-        if schedule.fitness > last_fitness:
-            last_fitness = schedule.fitness
-            last_schedule = schedule
+        genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=parameters["population_size"],
+                                                          max_generation=parameters["max_generation"],
+                                                          mutation_probability=parameters["mutation_probability"],
+                                                          courses=courses,
+                                                          students=students,
+                                                          professors=professors,
+                                                          time_slots=time_slots,
+                                                          available_time_slots=available_time_slots,
+                                                          time_slot_per_day=slot_per_day,
+                                                          calculate_penalty_of_student=calculate_penalty_of_student
+                                                          )
 
-        print(schedule.fitness)
+        for _ in range(content["number_of_tries"]):
+            schedule: Schedule = genetic_algo.generate_schedule()
 
-    print('---------------')
-schedule.print()
+            if schedule.fitness > last_fitness:
+                last_fitness = schedule.fitness
+                last_schedule = schedule
+
+            socketio.emit("display fitness", {"message": f"try: {_ + 1}\tfitness: {schedule.fitness}"}, broadcast=False)
+            print(f'try: {_ + 1}\n\tfitness: {schedule.fitness}')
+
+        print('----------------------------')
+
+    last_schedule.print()
+    return last_schedule.to_json()
+
+
+app.run()
