@@ -38,29 +38,15 @@ After many generations, the algorithm tries to make a solution that satisfies ou
 
 - Each exam will be ? hours
 
-- The higher the fitness score, the better solution
+- The higher the fitness score, the better the solution
 
 ### Hyper parameters
 
-There are 3 main parameters: `Population size`, `Maximum of Generation`, `Mutation Probability`.
+- Population size: Default to 1000
 
-In `test_params.py` a range defined for every parameter and the program runs 10 times for every set of values. The ranges are:
+- Maximum of Generation: Default to 500
 
-- Population size: [100, 600] with step 100
-
-- Maximum of Generation: [100, 300] with step 100
-
-- Mutation Probability: [0.4, 0.9] with step 0.1
-
-To calculate which sets are the best, there are 2 scenarios:
-
-1. Evaluate average of fitnesses including values equal to 1
-
-2. Evaluate average of fitnesses excluding values equal to 1
-
-If we want to be more accurate we should use the first one, because genetic algorithm is a random based algorithm and we should consider all possible situations.
-
-The data is important to use the best possible values. We consider the data format and size is sames as we use in example data.
+- Mutation Probability: Default to 0.001
 
 ### Constraints
 
@@ -72,15 +58,19 @@ The data is important to use the best possible values. We consider the data form
 
 - Soft Constraints:
 
-  1. No two or three consecutive exams are allowed
+  1. Two consecutive exams has a penalty of
 
-  2. In two consecutive exams, there should be a single day rest
+  2. Three consecutive exams has a penalty of
 
-  3. There should not be exams in holidays
+  3. Having an exam on a holiday has a penalty of
+
+  4. Single day rest between exams has a penalty of
+
+  5. Two day rest between exams has a penalty of
 
 ### User-Defined classes
 
-- Course: stores `teacher`, `title` and list of `student ids`.
+- Course: stores `title`, `professor` and list of `student ids`.
 
 - Student: stores list of `courses`
 
@@ -90,13 +80,26 @@ The data is important to use the best possible values. We consider the data form
 
 ### Steps
 
-- The first step is to generate a random population, or list of (?) solutions. Each solution is represented by a Schedule class. Every Schedule object is assigned days to hold exams on. For every day we set some slots to put exams in them.
+#### Reading input data
 
-- A fitness value is calculated for each solution in population. Fitness score is based upon hard and soft constraints. If any of the hard constraints fail, the fitness value will be assigned to 1, meaning that it is not a valid solution. If not, for every soft constraint a penalty will be evaluated.
+The input are read from two separate files with data regarding:
 
-- One the fitness is calculated, the population is passed through for parent selection. This is done using roulette wheel selection. (?)
+1. which courses each student is enrolled in
+2. which courses does each professor teach
 
-- . . .
+#### Run the Genetic Algorithm
+
+For this problem we are using `Genetic Algorithm` to find a good solution.
+The algorithm is as follows:
+
+1. Generate a set of N random solutions. This set is called a population
+2. Repeat:
+   1. calculate how good each solution in the population. This value is called fitness.
+   2. pick two solutions at random with weights proportional to each schedule's fitness.
+   3. crossover the two chosen solutions and create a new solution
+   4. mutate the chosen the new solution (this is to accumulate for lack of verity in out initial population)
+   5. repeat this process N times to get a new population
+3. Report best found solution
 
 ## Example
 
