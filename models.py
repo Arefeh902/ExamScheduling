@@ -165,9 +165,10 @@ class Schedule:
         return export_file_path
 
     def to_json(self):
-        time_slot_pks_to_courses = {}
+        schedule_data = []
         for time in self.time_to_course:
-            time_slot_pks_to_courses[time.pk] = [course.serialize() for course in self.time_to_course[time]]
-        data = {"schedule": time_slot_pks_to_courses, "fitness": self.fitness}
+            schedule_data.append({"time_slot": time.pk, "courses": [course.serialize() for course in self.time_to_course[time]]})
+
+        data = {"schedule": schedule_data, "fitness": self.fitness}
         return json.dumps(data, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)

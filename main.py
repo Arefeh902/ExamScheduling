@@ -38,7 +38,8 @@ def get_schedule():
                                                           courses=courses,
                                                           students=students,
                                                           professors=professors,
-                                                          time_slots=available_time_slots,
+                                                          time_slots=time_slots,
+                                                          available_time_slots=available_time_slots,
                                                           time_slot_per_day=content['number_of_slots_per_day'],
                                                           calculate_penalty_of_student=calculate_penalty_of_student
                                                           )
