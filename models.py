@@ -1,9 +1,5 @@
 import csv
 import json
-from config import get_config_dict
-
-Config = get_config_dict()
-SLOT_PER_DAY = Config['number_of_slots_per_day']
 
 
 class Course:
@@ -65,9 +61,13 @@ class TimeSlot:
     pk: int
     is_available: bool
     is_holiday: bool
+    SLOT_PER_DAY: int = 3
 
     def get_day(self):
-        return (self.pk - 1) // SLOT_PER_DAY
+        return (self.pk - 1) // self.SLOT_PER_DAY
+
+    def get_slot(self):
+        return (self.pk - 1) % self.SLOT_PER_DAY
 
     def __init__(self, pk: int, is_available: bool = True, is_holiday: bool = False):
         self.pk = pk
@@ -75,10 +75,10 @@ class TimeSlot:
         self.is_holiday = is_holiday
 
     def __str__(self):
-        return f'Day:{self.pk // SLOT_PER_DAY} Slot:{self.pk % SLOT_PER_DAY}'
+        return f'Day:{self.get_day()} Slot:{self.get_slot()}'
 
     def __repr__(self):
-        return f'Day:{self.pk // SLOT_PER_DAY} Slot:{self.pk % SLOT_PER_DAY}'
+        return f'Day:{self.get_day()} Slot:{self.get_slot()}'
 
     def __cmp__(self, other):
         if self.pk <= other.pk:
@@ -99,6 +99,7 @@ class TimeSlot:
 class Schedule:
     time_to_course: dict[TimeSlot: Course]
     fitness: int
+    SLOT_PER_DAY: int = 3
 
     def __init__(self, time_slots: list[TimeSlot]):
         self.time_to_course = dict()
@@ -133,7 +134,7 @@ class Schedule:
             for c in self.time_to_course[time]:
                 print(c, end=' ')
             print()
-            if time.pk % SLOT_PER_DAY == SLOT_PER_DAY - 1:
+            if time.pk % self.SLOT_PER_DAY == self.SLOT_PER_DAY - 1:
                 print()
 
     def get_csv_export(self, file_name: str = 'schedule.csv') -> str:
@@ -143,22 +144,22 @@ class Schedule:
             writer = csv.writer(export_file)
 
             header: list[str] = ['ردیف']
-            for i in range(SLOT_PER_DAY):
+            for i in range(self.SLOT_PER_DAY):
                 header.append(str(i + 1))
             writer.writerow(header)
 
             day_id: int = 0
-            data: list[str] = [str(day_id)] + [''] * SLOT_PER_DAY
+            data: list[str] = [str(day_id)] + [''] * self.SLOT_PER_DAY
             for time in sorted(list(self.time_to_course)):
-                if time.pk // SLOT_PER_DAY != day_id:
+                if time.pk // self.SLOT_PER_DAY != day_id:
                     writer.writerow(data)
                     day_id += 1
-                    while day_id != time.pk // SLOT_PER_DAY:
+                    while day_id != time.pk // self.SLOT_PER_DAY:
                         writer.writerow([day_id])
                         day_id += 1
-                    data = [str(day_id)] + [''] * SLOT_PER_DAY
+                    data = [str(day_id)] + [''] * self.SLOT_PER_DAY
 
-                data[time.pk % SLOT_PER_DAY + 1] += Course.join_course_titles(self.time_to_course[time])
+                data[time.pk % self.SLOT_PER_DAY + 1] += Course.join_course_titles(self.time_to_course[time])
 
             writer.writerow(data)
 
