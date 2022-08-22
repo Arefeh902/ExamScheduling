@@ -58,8 +58,8 @@ def calculate_number_of_two_consecutive_days_rest(schedule: Schedule, student: S
 
 class Penalty:
     TWO_CONSECUTIVE_EXAM = 1000
-    THREE_CONSECUTIVE_EXAM = 50000
-    EXAM_ON_HOLIDAY = 1000
+    THREE_CONSECUTIVE_EXAM = 10000
+    EXAM_ON_HOLIDAY = 200
     SINGLE_DAY_REST = 500
     TWO_CONSECUTIVE_DAYS_REST = 250
     
