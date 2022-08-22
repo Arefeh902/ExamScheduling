@@ -34,11 +34,13 @@ After many generations, the algorithm tries to make a solution that satisfies ou
 
 ### Assumptions
 
-- There are 3 time slots in a day
+- User can set number of time slots per day.
 
-- Each exam will be ? hours
+- The program can try as many times as user wants.
 
-- The higher the fitness score, the better the solution
+- The higher the fitness score, the better the solution.
+
+- Data should be read from specific format in xlsx.
 
 ### Hyper parameters
 
