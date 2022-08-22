@@ -64,15 +64,15 @@ After many generations, the algorithm tries to make a solution that satisfies ou
 
 - Soft Constraints:
 
-  1. Two consecutive exams has a penalty of
+  1. Two consecutive exams has a penalty of 1000
 
-  2. Three consecutive exams has a penalty of
+  2. Three consecutive exams has a penalty of 10000
 
-  3. Having an exam on a holiday has a penalty of
+  3. Having an exam on a holiday has a penalty of 200
 
-  4. Single day rest between exams has a penalty of
+  4. Single day rest between exams has a penalty of 500
 
-  5. Two day rest between exams has a penalty of
+  5. Two day rest between exams has a penalty of 250
 
 ### User-Defined classes
 
