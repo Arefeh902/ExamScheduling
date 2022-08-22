@@ -3,18 +3,18 @@ from utils import get_sorted_mean
 from ga import GeneticAlgorithm
 from constraints.soft_constraints import calculate_penalty_of_student
 from read_data import read_student_and_course_data
-from config import get_config_dict
 
-Config = get_config_dict()
-
+NUMBER_OF_DAYS = 12
+SLOTS_PER_DAY = 3
 NUM_OF_RUNNING = 10
 
-def test_different_params(path_to_input_file: str, num_of_days: int = Config['number_of_days']):
+
+def test_different_params(path_to_input_file: str, num_of_days: int = NUMBER_OF_DAYS):
     professors: list[str] = []
 
     courses, students = read_student_and_course_data(path_to_input_file)
 
-    time_slots: list[TimeSlot] = [TimeSlot(id) for id in range(num_of_days * Config['number_of_slots_per_day'])]
+    time_slots: list[TimeSlot] = [TimeSlot(id) for id in range(num_of_days * SLOTS_PER_DAY)]
     population_sizes: list[int] = [i for i in range(100, 601, 100)]
     max_generations: list[int] = [i for i in range(100, 301, 100)]
     mutation_probs: list[float] = [i/10 for i in range(4, 10)]
@@ -39,7 +39,7 @@ def test_different_params(path_to_input_file: str, num_of_days: int = Config['nu
                                                                       students=students,
                                                                       professors=professors,
                                                                       time_slots=time_slots,
-                                                                      time_slot_per_day=Config['number_of_slots_per_day'],
+                                                                      time_slot_per_day=SLOTS_PER_DAY,
                                                                       calculate_penalty_of_student=
                                                                       calculate_penalty_of_student
                                                                       )
@@ -50,3 +50,4 @@ def test_different_params(path_to_input_file: str, num_of_days: int = Config['nu
     output_file.close()
 
     get_sorted_mean(path_to_output_file)
+
