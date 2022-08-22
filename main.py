@@ -56,6 +56,7 @@ def get_schedule():
         print('----------------------------')
 
     last_schedule.print()
-    return jsonify(last_schedule.to_json())
+    return last_schedule.to_json()
+
 
 app.run()

@@ -45,6 +45,9 @@ class Course:
             res += f'{course.title} '
         return res
 
+    def serialize(self):
+        return {"title": self.title, "professor": self.professor, "student_ids": self.students_ids}
+
 
 class Student:
     pk: int
@@ -164,7 +167,7 @@ class Schedule:
     def to_json(self):
         time_slot_pks_to_courses = {}
         for time in self.time_to_course:
-            time_slot_pks_to_courses[time.pk] = self.time_to_course[time]
+            time_slot_pks_to_courses[time.pk] = [course.serialize() for course in self.time_to_course[time]]
         data = {"schedule": time_slot_pks_to_courses, "fitness": self.fitness}
         return json.dumps(data, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)
