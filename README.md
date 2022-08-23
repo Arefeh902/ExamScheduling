@@ -62,6 +62,8 @@ After many generations, the algorithm tries to make a solution that satisfies ou
 
   2. No teacher should have more than one exam in a day
 
+  3. No exam could be held on an unavailable day
+
 - Soft Constraints:
 
   1. Two consecutive exams has a penalty of 1000
