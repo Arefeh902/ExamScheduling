@@ -33,6 +33,6 @@ def read_professors_data(professors, courses) -> list[str]:
 def read_time_slots_data(time_slots) -> list[TimeSlot]:
     time_slots_list: list[TimeSlot] = []
     for slot in time_slots:
-        time_slots_list.append(TimeSlot(slot["pk"], slot["is_available"], slot["is_holiday"], slot[""]))
+        time_slots_list.append(TimeSlot(slot["pk"], slot["is_available"], slot["is_holiday"], slot["has_general_exam"]))
     return time_slots_list
 

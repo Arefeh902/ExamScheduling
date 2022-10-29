@@ -24,7 +24,6 @@ def get_schedule():
     Schedule.SLOT_PER_DAY = slot_per_day
     TimeSlot.SLOT_PER_DAY = slot_per_day
 
-    last_fitness = 0
     last_schedule = None
 
     for parameters in hyper_parameters_list:
@@ -48,8 +47,9 @@ def get_schedule():
         for _ in range(content["number_of_tries"]):
             schedule: Schedule = genetic_algo.generate_schedule()
 
-            if schedule.fitness > last_fitness:
-                last_fitness = schedule.fitness
+            if last_schedule is None:
+                last_schedule = schedule
+            elif schedule.fitness > last_schedule.fitness:
                 last_schedule = schedule
 
             print(f'try: {_ + 1}\n\tfitness: {schedule.fitness}')

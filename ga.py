@@ -7,7 +7,7 @@ from constraints.soft_constraints import calculate_special_and_general_exams_int
 
 class GeneticAlgorithm:
 
-    MAX_FITNESS: int = 5000
+    MAX_FITNESS: int = 10000
     MAX_RANDOM_TRY: int = 1000
 
     def __init__(self,
@@ -98,10 +98,10 @@ class GeneticAlgorithm:
         return [self.generate_random_solution() for _ in range(self.population_size)]
 
     def create_pool(self):
-        self.pool[1] = self.current_population[0].fitness
+        self.pool[1] = self.current_population[0].fitness * 2
 
         for i in range(1, len(self.current_population)):
-            self.pool[i] = self.pool[i-1] + self.current_population[i].fitness
+            self.pool[i] = self.pool[i-1] + self.current_population[i].fitness * 2
 
     def get_parents(self) -> tuple[Schedule, Schedule]:
         rand_a: int = random.randint(1, self.pool[self.population_size-1])
