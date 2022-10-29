@@ -1,5 +1,6 @@
 from models import TimeSlot, Student, Schedule
 from utils import get_student_time_slots
+from hard_constraints import calculate_exams_in_one_day
 
 
 def calculate_number_of_two_consecutive_exams(schedule: Schedule, student: Student) -> int:
@@ -57,11 +58,13 @@ def calculate_number_of_two_consecutive_days_rest(schedule: Schedule, student: S
 
 
 class Penalty:
-    TWO_CONSECUTIVE_EXAM = 1000
-    THREE_CONSECUTIVE_EXAM = 10000
-    EXAM_ON_HOLIDAY = 200
-    SINGLE_DAY_REST = 500
-    TWO_CONSECUTIVE_DAYS_REST = 250
+    TWO_EXAMS_IN_ONE_DAY = -10
+    TWO_CONSECUTIVE_EXAM = -3
+    THREE_CONSECUTIVE_EXAM = -5
+    EXAM_ON_HOLIDAY = -3
+    SINGLE_DAY_REST = -1
+    TWO_CONSECUTIVE_DAYS_REST = -0.5
+    COINCIDES_WITH_GENERAL_EXAMS = -1
     
 
 def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
@@ -72,5 +75,17 @@ def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
     penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
     penalty += Penalty.SINGLE_DAY_REST * calculate_number_of_single_day_rest(schedule, student)
     penalty += Penalty.TWO_CONSECUTIVE_DAYS_REST * calculate_number_of_two_consecutive_days_rest(schedule, student)
+    penalty += Penalty.TWO_EXAMS_IN_ONE_DAY * calculate_exams_in_one_day(schedule, student)
 
     return penalty
+
+
+def calculate_special_and_general_exams_intersection_penalty(schedule: Schedule) -> int:
+    ans: int = 0
+
+    for time in schedule.time_to_course:
+        for course in schedule.time_to_course[time]:
+            if course.is_first_or_second_year_course and time.has_general_exam:
+                ans += 1
+
+    return ans * Penalty.COINCIDES_WITH_GENERAL_EXAMS

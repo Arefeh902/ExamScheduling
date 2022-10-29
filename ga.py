@@ -2,11 +2,12 @@ from models import Course, Student, TimeSlot, Schedule
 from typing import Callable
 import random
 from constraints.hard_constraints import validate_hard_constraints
+from constraints.soft_constraints import calculate_special_and_general_exams_intersection_penalty
 
 
 class GeneticAlgorithm:
 
-    MAX_FITNESS: int = 100000000
+    MAX_FITNESS: int = 5000
     MAX_RANDOM_TRY: int = 1000
 
     def __init__(self,
@@ -49,6 +50,8 @@ class GeneticAlgorithm:
 
         for student in self.students:
             fit -= self.calculate_penalty_of_student(schedule, student)
+
+        fit -= calculate_special_and_general_exams_intersection_penalty(schedule)
         
         return fit
 
@@ -168,4 +171,5 @@ class GeneticAlgorithm:
 
             self.current_population = self.get_next_generation()
 
+        best_schedule.fitness -= self.MAX_FITNESS
         return best_schedule

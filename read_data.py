@@ -5,7 +5,7 @@ import csv
 def read_courses_data(courses) -> list[Course]:
     courses_list: list[Course] = []
     for course in courses:
-        courses_list.append(Course(course["pk"], course["title"], "", []))
+        courses_list.append(Course(course["pk"], course["title"], "", [], course["is_first"]))
     return courses_list
 
 
@@ -33,6 +33,6 @@ def read_professors_data(professors, courses) -> list[str]:
 def read_time_slots_data(time_slots) -> list[TimeSlot]:
     time_slots_list: list[TimeSlot] = []
     for slot in time_slots:
-        time_slots_list.append(TimeSlot(slot["pk"], slot["is_available"], slot["is_holiday"]))
+        time_slots_list.append(TimeSlot(slot["pk"], slot["is_available"], slot["is_holiday"], slot[""]))
     return time_slots_list
 

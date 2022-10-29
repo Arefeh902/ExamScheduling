@@ -6,13 +6,15 @@ class Course:
     title: str
     professor: str
     students_ids: list[int]
+    is_first_or_second_year_course: bool
     pk: int
 
-    def __init__(self, pk: int, title: str, professor: str, students_ids: list[int]):
+    def __init__(self, pk: int, title: str, professor: str, students_ids: list[int], is_first: bool = False):
         self.pk = pk
         self.title = title
         self.professor = professor
         self.students_ids = students_ids
+        self.is_first_or_second_year_course = is_first
 
     def __str__(self):
         return self.title
@@ -61,6 +63,7 @@ class TimeSlot:
     pk: int
     is_available: bool
     is_holiday: bool
+    has_general_exam: bool
     SLOT_PER_DAY: int = 3
 
     def get_day(self):
@@ -69,10 +72,11 @@ class TimeSlot:
     def get_slot(self):
         return (self.pk - 1) % self.SLOT_PER_DAY
 
-    def __init__(self, pk: int, is_available: bool = True, is_holiday: bool = False):
+    def __init__(self, pk: int, is_available: bool = True, is_holiday: bool = False, has_general_exam: bool = False):
         self.pk = pk
         self.is_available = is_available
         self.is_holiday = is_holiday
+        self.has_general_exam = has_general_exam
 
     def __str__(self):
         return f'Day:{self.get_day()} Slot:{self.get_slot()}'
