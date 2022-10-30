@@ -17,7 +17,7 @@ class Course:
         self.is_first_or_second_year_course = is_first
 
     def __str__(self):
-        return self.title
+        return str(self.pk) + self.title
 
     def __repr__(self):
         return self.title

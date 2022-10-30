@@ -7,7 +7,7 @@ from constraints.soft_constraints import calculate_special_and_general_exams_int
 
 class GeneticAlgorithm:
 
-    MAX_FITNESS: int = 10000
+    MAX_FITNESS: int = 1000
     MAX_RANDOM_TRY: int = 1000
 
     def __init__(self,
@@ -52,7 +52,10 @@ class GeneticAlgorithm:
             fit -= self.calculate_penalty_of_student(schedule, student)
 
         fit -= calculate_special_and_general_exams_intersection_penalty(schedule)
-        
+
+        if fit < 1:
+            return 1
+
         return fit
 
     def get_slot_by_pk(self, pk: int) -> TimeSlot:
