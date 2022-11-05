@@ -24,6 +24,7 @@ def read_professors_data(professors, courses) -> list[str]:
     for prof in professors:
         prof_name = prof["name"]
         professors_list.append(prof_name)
+        print(prof_name, prof["courses"])
         for course_id in prof["courses"]:
             course: Course = Course.get_course_by_id(courses, course_id)
             course.professor = prof_name
