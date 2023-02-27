@@ -7,7 +7,7 @@ from constraints.soft_constraints import calculate_special_and_general_exams_int
 
 class GeneticAlgorithm:
 
-    MAX_FITNESS: int = 1000
+    MAX_FITNESS: int = 100_000
     MAX_RANDOM_TRY: int = 1000
 
     def __init__(self,
