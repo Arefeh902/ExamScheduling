@@ -24,9 +24,11 @@ def get_schedule():
         # {"population_size": 700, "max_generation": 400, "mutation_probability": 0.2},
         #                       {"population_size": 800, "max_generation": 500, "mutation_probability": 0.2},
         #                       {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.2},
+        #                       {"population_size": 600, "max_generation": 400, "mutation_probability": 0.3},
         #                       {"population_size": 700, "max_generation": 400, "mutation_probability": 0.3},
         #                       {"population_size": 800, "max_generation": 500, "mutation_probability": 0.3},
         #                       {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.3},
+        #                       {"population_size": 600, "max_generation": 400, "mutation_probability": 0.4},
         #                       {"population_size": 700, "max_generation": 400, "mutation_probability": 0.4},
         #                       {"population_size": 800, "max_generation": 500, "mutation_probability": 0.4},
         #                       {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.4},
@@ -63,7 +65,6 @@ def get_schedule():
             elif schedule.fitness > last_schedule.fitness:
                 last_schedule = schedule
 
-            last_schedule.print()
             print(f'try: {_ + 1}\n\tfitness: {schedule.fitness}')
 
         print('----------------------------')
