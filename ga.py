@@ -51,7 +51,7 @@ class GeneticAlgorithm:
         for student in self.students:
             fit -= self.calculate_penalty_of_student(schedule, student)
 
-        fit -= calculate_special_and_general_exams_intersection_penalty(schedule)
+        # fit -= calculate_special_and_general_exams_intersection_penalty(schedule)
 
         if fit < 1:
             return 1
