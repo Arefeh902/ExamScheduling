@@ -125,8 +125,9 @@ class GeneticAlgorithm:
 
     def crossover(self) -> Schedule:
         parent_a, parent_b = self.get_parents()
-        schedule: Schedule = Schedule(self.available_time_slots)
+        schedule: Schedule = Schedule(self.time_slots)
 
+        for course in self.courses:
         for course in self.courses:
 
             if random.uniform(0, 1) <= 1/2:

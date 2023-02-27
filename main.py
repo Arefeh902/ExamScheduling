@@ -29,8 +29,8 @@ def get_schedule():
     available_time_slots = TimeSlot.get_available_time_slots(time_slots)
     hyper_parameters_list: list[dict[str, int]] = content["hyper_parameters_list"]
     hyper_parameters_list += [
-                              {"population_size": 600, "max_generation": 600, "mutation_probability": 0.3},
-                              {"population_size": 700, "max_generation": 400, "mutation_probability": 0.3},
+                              # {"population_size": 600, "max_generation": 600, "mutation_probability": 0.3},
+                              # {"population_size": 700, "max_generation": 400, "mutation_probability": 0.3},
                               # {"population_size": 800, "max_generation": 500, "mutation_probability": 0.3},
                               # {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.3},
                               # {"population_size": 600, "max_generation": 400, "mutation_probability": 0.4},
