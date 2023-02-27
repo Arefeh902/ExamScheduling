@@ -198,6 +198,17 @@ class Schedule:
         for time in self.time_to_course:
             schedule_data.append({"time_slot": time.pk, "courses": [course.serialize() for course in self.time_to_course[time]]})
 
-        data = {"schedule": schedule_data, "fitness": self.fitness}
+        data = {"schedule": schedule_data, "fitness": self.fitness,
+
+                "two_exams_in_one_day": self.two_exams_in_one_day,
+                "students_with_two_exams_in_one_day": self.students_with_two_exams_in_one_day,
+
+                "two_consecutive_exams": self.two_consecutive_exams,
+                "student_with_two_consecutive_exams": self.students_with_two_consecutive_exams,
+
+                "three_consecutive_exams": self.three_consecutive_exams,
+                "students_with_three_consecutive_exams": self.students_with_three_consecutive_exams,
+
+                }
         return json.dumps(data, default=lambda o: o.__dict__,
                           sort_keys=True, indent=4)

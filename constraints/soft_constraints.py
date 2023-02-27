@@ -78,7 +78,7 @@ def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
     schedule.students_with_three_consecutive_exams = 1 if schedule.three_consecutive_exams else 0
     penalty += Penalty.THREE_CONSECUTIVE_EXAM * schedule.three_consecutive_exams
 
-    # penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
+    penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
 
     schedule.single_day_rest = calculate_number_of_single_day_rest(schedule, student)
     schedule.students_with_single_day_rest = 1 if schedule.single_day_rest else 0
