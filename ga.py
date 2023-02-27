@@ -174,5 +174,5 @@ class GeneticAlgorithm:
 
             self.current_population = self.get_next_generation()
 
-        best_schedule.fitness -= self.MAX_FITNESS
+        # best_schedule.fitness -= self.MAX_FITNESS
         return best_schedule
