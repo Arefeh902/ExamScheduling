@@ -103,10 +103,34 @@ class TimeSlot:
 class Schedule:
     time_to_course: dict[TimeSlot: Course]
     fitness: int
+
+    two_exams_in_one_day: int
+    two_consecutive_exams: int
+    three_consecutive_exams: int
+    exams_on_holiday: int
+    single_day_rest: int
+
+    students_with_two_exams_in_one_day: int
+    students_with_two_consecutive_exams: int
+    students_with_three_consecutive_exams: int
+    students_with_exams_on_holiday: int
+    students_with_single_day_rest: int
+
     SLOT_PER_DAY: int = 3
 
     def __init__(self, time_slots: list[TimeSlot]):
         self.time_to_course = dict()
+        self.two_exams_in_one_day = 0
+        self.two_consecutive_exams = 0
+        self.three_consecutive_exams = 0
+        self.exams_on_holiday = 0
+        self.single_day_rest = 0
+
+        students_with_two_exams_in_one_day: int
+        students_with_two_consecutive_exams: int
+        students_with_three_consecutive_exams: int
+        students_with_exams_on_holiday: int
+        students_with_single_day_rest: int
         for slot in time_slots:
             self.time_to_course[slot] = list()
 
