@@ -194,8 +194,6 @@ class Schedule:
         return export_file_path
 
     def to_json(self):
-        for time in self.time_to_course:
-            print(time)
         schedule_data = []
         for time in self.time_to_course:
             schedule_data.append({"time_slot": time.pk, "courses": [course.serialize() for course in self.time_to_course[time]]})
