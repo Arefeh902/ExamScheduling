@@ -5,6 +5,14 @@ from read_data import read_courses_data, read_students_data, read_professors_dat
 from ga import GeneticAlgorithm
 from constraints.soft_constraints import calculate_penalty_of_student
 from utils import convert_csv_to_xlsx
+import logging
+
+# Create and configure logger
+logging.basicConfig(filename="newfile.log",
+                    format='%(asctime)s %(message)s',
+                    filemode='w')
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
 
 
 app = Flask("Exam Scheduling")
@@ -21,17 +29,14 @@ def get_schedule():
     available_time_slots = TimeSlot.get_available_time_slots(time_slots)
     hyper_parameters_list: list[dict[str, int]] = content["hyper_parameters_list"]
     hyper_parameters_list += [
-        # {"population_size": 700, "max_generation": 400, "mutation_probability": 0.2},
-        #                       {"population_size": 800, "max_generation": 500, "mutation_probability": 0.2},
-        #                       {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.2},
-        #                       {"population_size": 600, "max_generation": 400, "mutation_probability": 0.3},
-        #                       {"population_size": 700, "max_generation": 400, "mutation_probability": 0.3},
-        #                       {"population_size": 800, "max_generation": 500, "mutation_probability": 0.3},
-        #                       {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.3},
-        #                       {"population_size": 600, "max_generation": 400, "mutation_probability": 0.4},
-        #                       {"population_size": 700, "max_generation": 400, "mutation_probability": 0.4},
-        #                       {"population_size": 800, "max_generation": 500, "mutation_probability": 0.4},
-        #                       {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.4},
+                              {"population_size": 600, "max_generation": 600, "mutation_probability": 0.3},
+                              {"population_size": 700, "max_generation": 400, "mutation_probability": 0.3},
+                              # {"population_size": 800, "max_generation": 500, "mutation_probability": 0.3},
+                              # {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.3},
+                              # {"population_size": 600, "max_generation": 400, "mutation_probability": 0.4},
+                              # {"population_size": 700, "max_generation": 400, "mutation_probability": 0.4},
+                              # {"population_size": 800, "max_generation": 500, "mutation_probability": 0.4},
+                              # {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.4},
                               ]
     slot_per_day: int = content["number_of_slots_per_day"]
     Schedule.SLOT_PER_DAY = slot_per_day
@@ -43,6 +48,7 @@ def get_schedule():
 
         for header in parameters:
             print(f'{header}: {parameters[header]}, ', end='')
+            logger.info(f'{header}: {parameters[header]}')
         print()
 
         genetic_algo: GeneticAlgorithm = GeneticAlgorithm(population_size=parameters["population_size"],
@@ -65,6 +71,7 @@ def get_schedule():
             elif schedule.fitness > last_schedule.fitness:
                 last_schedule = schedule
 
+            logger.info(f'try: {_ + 1}\n\tfitness: {schedule.fitness}')
             print(f'try: {_ + 1}\n\tfitness: {schedule.fitness}')
 
         print('----------------------------')

@@ -70,21 +70,21 @@ class Penalty:
 def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
     penalty: int = 0
 
-    schedule.two_consecutive_exams = calculate_number_of_two_consecutive_exams(schedule, student)
+    schedule.two_consecutive_exams += calculate_number_of_two_consecutive_exams(schedule, student)
     schedule.students_with_two_consecutive_exams += 1 if schedule.two_consecutive_exams > 0 else 0
     penalty += Penalty.TWO_CONSECUTIVE_EXAM * schedule.two_consecutive_exams
 
-    schedule.three_consecutive_exams = calculate_number_of_three_consecutive_exams(schedule, student)
+    schedule.three_consecutive_exams += calculate_number_of_three_consecutive_exams(schedule, student)
     schedule.students_with_three_consecutive_exams += 1 if schedule.three_consecutive_exams > 0 else 0
     penalty += Penalty.THREE_CONSECUTIVE_EXAM * schedule.three_consecutive_exams
 
     # penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
 
-    schedule.single_day_rest = calculate_number_of_single_day_rest(schedule, student)
+    schedule.single_day_rest += calculate_number_of_single_day_rest(schedule, student)
     schedule.students_with_single_day_rest += 1 if schedule.single_day_rest > 0 else 0
     penalty += Penalty.SINGLE_DAY_REST * schedule.single_day_rest
 
-    schedule.two_exams_in_one_day = calculate_exams_in_one_day(schedule, student)
+    schedule.two_exams_in_one_day += calculate_exams_in_one_day(schedule, student)
     schedule.students_with_two_exams_in_one_day += 1 if schedule.two_exams_in_one_day > 0 else 0
     penalty += Penalty.TWO_EXAMS_IN_ONE_DAY * schedule.two_exams_in_one_day
 
