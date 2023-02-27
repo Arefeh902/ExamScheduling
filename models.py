@@ -17,7 +17,7 @@ class Course:
         self.is_first_or_second_year_course = is_first
 
     def __str__(self):
-        return str(self.pk) + self.title
+        return str(self.pk) + " " + str(self.title)
 
     def __repr__(self):
         return self.title
@@ -56,7 +56,7 @@ class Student:
         self.courses = courses
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.pk) + " " + str(self.courses)
 
 
 class TimeSlot:
@@ -79,7 +79,7 @@ class TimeSlot:
         self.has_general_exam = has_general_exam
 
     def __str__(self):
-        return f'Day:{self.get_day()} Slot:{self.get_slot()}'
+        return f'Day:{self.get_day()} Slot:{self.get_slot()}, Able:{self.is_available}'
 
     def __repr__(self):
         return f'Day:{self.get_day()} Slot:{self.get_slot()}'
@@ -194,6 +194,8 @@ class Schedule:
         return export_file_path
 
     def to_json(self):
+        for time in self.time_to_course:
+            print(time)
         schedule_data = []
         for time in self.time_to_course:
             schedule_data.append({"time_slot": time.pk, "courses": [course.serialize() for course in self.time_to_course[time]]})

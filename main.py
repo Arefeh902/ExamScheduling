@@ -20,6 +20,17 @@ def get_schedule():
     time_slots: list[TimeSlot] = read_time_slots_data(content["time_slots"])
     available_time_slots = TimeSlot.get_available_time_slots(time_slots)
     hyper_parameters_list: list[dict[str, int]] = content["hyper_parameters_list"]
+    hyper_parameters_list += [
+        # {"population_size": 700, "max_generation": 400, "mutation_probability": 0.2},
+        #                       {"population_size": 800, "max_generation": 500, "mutation_probability": 0.2},
+        #                       {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.2},
+        #                       {"population_size": 700, "max_generation": 400, "mutation_probability": 0.3},
+        #                       {"population_size": 800, "max_generation": 500, "mutation_probability": 0.3},
+        #                       {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.3},
+        #                       {"population_size": 700, "max_generation": 400, "mutation_probability": 0.4},
+        #                       {"population_size": 800, "max_generation": 500, "mutation_probability": 0.4},
+        #                       {"population_size": 1000, "max_generation": 450, "mutation_probability": 0.4},
+                              ]
     slot_per_day: int = content["number_of_slots_per_day"]
     Schedule.SLOT_PER_DAY = slot_per_day
     TimeSlot.SLOT_PER_DAY = slot_per_day
@@ -52,10 +63,11 @@ def get_schedule():
             elif schedule.fitness > last_schedule.fitness:
                 last_schedule = schedule
 
+            last_schedule.print()
             print(f'try: {_ + 1}\n\tfitness: {schedule.fitness}')
 
         print('----------------------------')
 
-    # convert_csv_to_xlsx(last_schedule.get_csv_export())
+    last_schedule.get_csv_export()
     return last_schedule.to_json()
 
