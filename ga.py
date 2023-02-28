@@ -7,7 +7,7 @@ from constraints.soft_constraints import calculate_special_and_general_exams_int
 
 class GeneticAlgorithm:
 
-    MAX_FITNESS: int = 100_000
+    MAX_FITNESS: int = 10_000
     MAX_RANDOM_TRY: int = 1000
 
     def __init__(self,
@@ -46,7 +46,7 @@ class GeneticAlgorithm:
         fit: int = GeneticAlgorithm.MAX_FITNESS
 
         if not validate_hard_constraints(schedule, self):
-            return 1
+            fit = 1
 
         for student in self.students:
             fit -= self.calculate_penalty_of_student(schedule, student)
