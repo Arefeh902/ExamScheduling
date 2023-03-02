@@ -34,6 +34,7 @@ class Course:
         for course in courses:
             if course.pk == pk:
                 return course
+        print("messed up here")
         return None
 
     @staticmethod

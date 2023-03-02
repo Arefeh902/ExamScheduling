@@ -64,38 +64,13 @@ def calculate_number_of_two_consecutive_days_rest(schedule: Schedule, student: S
 
 
 class Penalty:
-    TWO_EXAMS_IN_ONE_DAY = 12
-    TWO_CONSECUTIVE_EXAM = 3
-    THREE_CONSECUTIVE_EXAM = 9
+    TWO_EXAMS_IN_ONE_DAY = 1_000
+    TWO_CONSECUTIVE_EXAM = 20
+    THREE_CONSECUTIVE_EXAM = 70
     EXAM_ON_HOLIDAY = 0
     SINGLE_DAY_REST = 0
     # TWO_CONSECUTIVE_DAYS_REST = 0.5
     # COINCIDES_WITH_GENERAL_EXAMS = 1
-    
-
-# def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
-#     penalty: int = 0
-#
-#     schedule.two_consecutive_exams = calculate_number_of_two_consecutive_exams(schedule, student)
-#     schedule.students_with_two_consecutive_exams += 1 if schedule.two_consecutive_exams > 0 else 0
-#     penalty += Penalty.TWO_CONSECUTIVE_EXAM * schedule.two_consecutive_exams
-#
-#     schedule.three_consecutive_exams = calculate_number_of_three_consecutive_exams(schedule, student)
-#     schedule.students_with_three_consecutive_exams += 1 if schedule.three_consecutive_exams > 0 else 0
-#     penalty += Penalty.THREE_CONSECUTIVE_EXAM * schedule.three_consecutive_exams
-#
-#     # penalty += Penalty.EXAM_ON_HOLIDAY * calculate_number_of_exams_on_holidays(schedule, student)
-#
-#     schedule.single_day_rest = calculate_number_of_single_day_rest(schedule, student)
-#     schedule.students_with_single_day_rest += 1 if schedule.single_day_rest > 0 else 0
-#     penalty += Penalty.SINGLE_DAY_REST * schedule.single_day_rest
-#
-#     schedule.two_exams_in_one_day = calculate_exams_in_one_day(schedule, student)
-#     schedule.students_with_two_exams_in_one_day += 1 if schedule.two_exams_in_one_day > 0 else 0
-#     penalty += Penalty.TWO_EXAMS_IN_ONE_DAY * schedule.two_exams_in_one_day
-#
-#     # penalty += Penalty.TWO_CONSECUTIVE_DAYS_REST * calculate_number_of_two_consecutive_days_rest(schedule, student)
-#     return penalty
 
 
 def calculate_special_and_general_exams_intersection_penalty(schedule: Schedule) -> int:
@@ -122,10 +97,10 @@ def calculate_penalty_of_student(schedule: Schedule, student: Student) -> int:
     for time in times:
         days[time.get_day()] += 1
 
-    two_in_one_day = sum(days)
+    two_in_one_day = sum([max(d-1, 0)*d//2 for d in days])
     two_consecutive = sum([days[i]*days[i+1] for i in range(len(days)-1)])
     three_consecutive = sum([days[i]*days[i+1]*days[i+2] for i in range(len(days)-2)])
-    single_day_rest = sum([days[i]*days[i+2] for i in range(len(days)-2)])
+    single_day_rest = sum([days[i]*days[i+2] for i in range(len(days)-2) if days[i+1] == 0])
 
     penalty = 0
 
